@@ -1,2 +1,2 @@
 # Ignore development env files
-.development.env
+.env.development

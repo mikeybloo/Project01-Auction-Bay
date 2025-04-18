@@ -13,3 +13,35 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id Int @id
+  email String @unique
+  name String?
+  surname String?
+  avatar String
+  password String
+  auctions Auction[]
+  bids Bid[]
+}
+
+model Auction {
+  id Int @default(autoincrement()) @id
+  title String
+  description String
+  image String?
+  starting_price Int
+  published_on DateTime
+  end_date DateTime
+  active Boolean
+  author User @relation(fields: [authorId], references: [id])
+  authorId Int
+}
+
+model Bid {
+  id Int @default(autoincrement()) @id
+  offer Int 
+  published_on DateTime
+  author User @relation(fields: [authorId], references: [id])
+  authorId Int
+}
