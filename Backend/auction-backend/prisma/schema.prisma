@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -15,7 +15,7 @@ datasource db {
 }
 
 model User {
-  id Int @id
+  id String @id
   email String @unique
   name String?
   surname String?
@@ -26,7 +26,7 @@ model User {
 }
 
 model Auction {
-  id Int @default(autoincrement()) @id
+  id String @id
   title String
   description String
   image String?
@@ -35,13 +35,13 @@ model Auction {
   end_date DateTime
   active Boolean
   author User @relation(fields: [authorId], references: [id])
-  authorId Int
+  authorId String
 }
 
 model Bid {
-  id Int @default(autoincrement()) @id
+  id String @id
   offer Int 
   published_on DateTime
   author User @relation(fields: [authorId], references: [id])
-  authorId Int
+  authorId String
 }
