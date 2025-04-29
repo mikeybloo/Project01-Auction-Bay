@@ -8,7 +8,7 @@ export class UsersController {
 
     @Get(':id')
     @HttpCode(HttpStatus.OK)
-    async findOne(@Param('id') id: string): Promise<User | null> {
+    async findOne(@Param('id') id: string): Promise<User> {
         return this.usersService.user({ id });
     }
 
