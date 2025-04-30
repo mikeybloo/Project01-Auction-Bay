@@ -1,14 +1,47 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { User, Prisma } from '@prisma/client';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
     constructor(private prisma: PrismaService) {}
 
-    async user(userWhereUniqueInput: Prisma.UserWhereUniqueInput): Promise<User> {
+    async user(userWhereUniqueInput: Prisma.UserWhereUniqueInput): Promise<any> {
         try {
-            return this.prisma.user.findUniqueOrThrow({ where: userWhereUniqueInput, });
+            return this.prisma.user.findUniqueOrThrow({ 
+                where: userWhereUniqueInput,
+                select: {
+                    id: true,
+                    name: true,
+                    surname: true,
+                    avatar: true,
+                    auctions: {
+                        orderBy: {
+                            published_on: 'desc',
+                        },
+                        select: {
+                            id: true,
+                            title: true,
+                            starting_price: true,
+                            published_on: true,
+                            end_date: true,
+                            active: true,
+                            bids: {
+                                orderBy: {
+                                    offer: 'desc',
+                                }
+                            }
+                        }
+                    },
+                    bids: {
+                        select: {
+                            id: true,
+                            offer: true,
+                            published_on: true,
+                        }
+                    }
+                }
+            });
         } catch (err) {
             console.log(err)
             throw new BadRequestException('Something went wrongwhile finding the user.')

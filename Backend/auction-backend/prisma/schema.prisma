@@ -34,14 +34,21 @@ model Auction {
   published_on DateTime
   end_date DateTime
   active Boolean
+
   author User @relation(fields: [authorId], references: [id])
   authorId String
+
+  bids Bid[]
 }
 
 model Bid {
   id String @id @default(uuid())
   offer Int 
   published_on DateTime
+
   author User @relation(fields: [authorId], references: [id])
   authorId String
+
+  auction Auction @relation(fields: [auctionId], references: [id])
+  auctionId String
 }
