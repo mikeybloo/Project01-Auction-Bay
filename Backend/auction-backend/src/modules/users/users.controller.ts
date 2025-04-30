@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post
 import { UsersService } from './users.service';
 import { User } from '@prisma/client';
 
-@Controller('users')
+@Controller('me')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
