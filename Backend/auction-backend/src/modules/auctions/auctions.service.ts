@@ -58,6 +58,4 @@ export class AuctionsService {
             data,
         })
     }
-
-    
 }

@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { compareHash, hash } from 'src/utils/bcrypt'
+import { compareHash, hash } from 'src/utils/bcrypt';
 import { User } from '@prisma/client';
 import { RegisterUserDTO } from './dto/registerUserDTO';
-import { JwtService } from '@nestjs/jwt'
+import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
 
@@ -16,18 +16,18 @@ export class AuthService {
     ) {}
 
     async validateUser(email: string, password: string): Promise<User> {
-        console.log('Validating user...')
-        const user = await this.usersService.user({ email })
+        console.log('Validating user...');
+        const user = await this.usersService.user({ email });
         if(!user) {
-            throw new BadRequestException('Invalid credentials')
-        }
+            throw new BadRequestException('Invalid credentials');
+        };
 
         if(!(await compareHash(password, user.password))) {
-            throw new BadRequestException('Invalid credentials')
-        }
+            throw new BadRequestException('Invalid credentials');
+        };
 
-        console.log('User is valid')
-        return user
+        console.log('User is valid');
+        return user;
     }
 
     async register(registerUserDTO: RegisterUserDTO): Promise<User> {
