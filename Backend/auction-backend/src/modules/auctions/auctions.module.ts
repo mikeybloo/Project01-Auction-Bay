@@ -5,7 +5,7 @@ import { AuctionsController } from './auctions.controller';
 import { BidsModule } from '../bids/bids.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, BidsModule],
   controllers: [AuctionsController],
   providers: [AuctionsService],
   exports: [AuctionsService]

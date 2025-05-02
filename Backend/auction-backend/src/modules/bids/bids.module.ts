@@ -4,6 +4,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
   imports: [PrismaModule],
-  providers: [BidsService]
+  providers: [BidsService],
+  exports: [BidsService]
 })
 export class BidsModule {}

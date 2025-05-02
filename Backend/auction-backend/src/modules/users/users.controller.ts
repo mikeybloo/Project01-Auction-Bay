@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, Req } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Auction, User } from '@prisma/client';
 import { AuctionsService } from '../auctions/auctions.service';
@@ -56,13 +56,18 @@ export class UsersController {
     @Patch('update-password')
     @HttpCode(HttpStatus.OK)
     async update(@Body() updateUser: User, @Req() request: Request): Promise<User> {
-        const user = request.user as any;
-        const userId = user.userId;
+        try{
+            const user = request.user as any;
+            const userId = user.userId;
 
-        return this.usersService.updateUser({
-            where: { id: userId },
-            data: updateUser,
-        })
+            return this.usersService.updateUser({
+                where: { id: userId },
+                data: updateUser,
+            })
+        } catch (err) {
+            console.log(err)
+            throw new BadRequestException('Something went wrong while updating the user data.')
+        }
     }
 
     @Patch('auction/:id')
