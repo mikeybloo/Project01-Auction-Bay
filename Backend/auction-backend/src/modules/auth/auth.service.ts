@@ -17,7 +17,7 @@ export class AuthService {
 
     async validateUser(email: string, password: string): Promise<User> {
         console.log('Validating user...');
-        const user = await this.usersService.user({ email });
+        const user = await this.usersService.userSecure({ email });
         if(!user) {
             throw new BadRequestException('Invalid credentials');
         };

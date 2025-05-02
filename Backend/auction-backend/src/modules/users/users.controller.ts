@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { Auction, User } from '@prisma/client';
 import { AuctionsService } from '../auctions/auctions.service';
 import { Request } from 'express';
+import { AuthService } from '../auth/auth.service';
 
 @Controller('me')
 export class UsersController {
@@ -20,11 +21,10 @@ export class UsersController {
     @Get()
     @HttpCode(HttpStatus.OK)
     async findCurrent(@Req() request: Request): Promise<User[]> {
-        const user = request.user as any;
-        const userId = user.userId;
+        const user = await this.usersService.currentUser(request.cookies['access_token']);
 
         return this.usersService.user({ 
-            id: userId
+            id: user.id
         });
     }
 
@@ -37,8 +37,7 @@ export class UsersController {
     @Post('auction')
     @HttpCode(HttpStatus.CREATED)
     async createAuction(@Body() auctionBody: Auction, @Req() request: Request): Promise<Auction> {
-        const user = request.user as any;
-        const userId = user.userId;
+        const user = await this.usersService.currentUser(request.cookies['access_token']);
 
         return this.auctionsService.createAuction({
             title: auctionBody.title,
@@ -48,7 +47,7 @@ export class UsersController {
             end_date: auctionBody.end_date,
             active: true,
             author: {
-                connect: { id: userId }
+                connect: { id: user.id }
             },
         });
     }

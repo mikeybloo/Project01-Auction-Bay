@@ -4,12 +4,14 @@ import { Public } from 'src/decorators/public.decorator';
 import { AuctionsService } from './auctions.service';
 import { BidsService } from '../bids/bids.service';
 import { Request } from 'express';
+import { UsersService } from '../users/users.service';
 
 @Controller('auctions')
 export class AuctionsController {
     constructor (
         private readonly auctionsService: AuctionsService,
-        private readonly bidsService: BidsService) {}
+        private readonly bidsService: BidsService,
+        private readonly usersService: UsersService) {}
 
     @Get(':id')
     @HttpCode(HttpStatus.OK)
@@ -22,7 +24,7 @@ export class AuctionsController {
     async list(@Query('page') page: number): Promise<Auction[]> {
         // Pagination using Prisma. Takes the page number minus one and skips as many elements. 
         return this.auctionsService.auctions({ 
-            skip: page - 1 * 10, // Page 1 = 0 element skips
+            skip: (page - 1) * 10,
             take: 10
         });
     }
@@ -45,8 +47,7 @@ export class AuctionsController {
     async placeBid(@Body() bidBody: Bid, @Param('id') id: string, @Req() request: Request): Promise<Bid> {
         const auctionId = id;
 
-        const user = request.user as any;
-        const userId = user.userId;
+        const user = await this.usersService.currentUser(request.cookies['access_token']);
 
         return this.bidsService.createBid({
             offer: bidBody.offer,
@@ -55,7 +56,7 @@ export class AuctionsController {
                 connect: { id: auctionId }
             },
             author: {
-                connect: { id: userId }
+                connect: { id: user.id }
             }
         });
     }

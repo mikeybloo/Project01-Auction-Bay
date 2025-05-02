@@ -1,12 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { User, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { BidsService } from '../bids/bids.service';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UsersService {
     constructor(
-        private prisma: PrismaService) {}
+        private prisma: PrismaService,
+        private readonly jwtService: JwtService,
+        private readonly configService: ConfigService) {}
 
     async user(userWhereUniqueInput: Prisma.UserWhereUniqueInput): Promise<any> {
         try {
@@ -16,6 +19,7 @@ export class UsersService {
                     id: true,
                     name: true,
                     surname: true,
+                    email: true,
                     avatar: true,
                     auctions: {
                         orderBy: {
@@ -50,6 +54,26 @@ export class UsersService {
         }
     }
 
+    // User with password for auth 
+    async userSecure(userWhereUniqueInput: Prisma.UserWhereUniqueInput): Promise<any> {
+        try {
+            return await this.prisma.user.findUniqueOrThrow({ 
+                where: userWhereUniqueInput,
+                select: {
+                    id: true,
+                    name: true,
+                    surname: true,
+                    email: true,
+                    password: true,
+                    avatar: true,
+                }
+            });
+        } catch (err) {
+            console.log(err)
+            throw new BadRequestException('User does not exist')
+        }
+    }
+
     async users(params: { 
         skip?: number;
         take?: number
@@ -75,6 +99,13 @@ export class UsersService {
         return this.prisma.user.update({
             data,
             where,
+        });
+    }
+
+    async currentUser(cookie: string): Promise<User> {
+        const data = await this.jwtService.verifyAsync(cookie, { secret: this.configService.get('JWT_SECRET') })
+        return this.user({
+            id: data['sub']
         });
     }
 
