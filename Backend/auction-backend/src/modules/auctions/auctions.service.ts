@@ -4,7 +4,8 @@ import { Auction, Prisma } from '@prisma/client';
 
 @Injectable()
 export class AuctionsService {
-    constructor (private prisma: PrismaService) {}
+    constructor (
+        private prisma: PrismaService) {}
 
     async auction(auctionWhereUniqueInput: Prisma.AuctionWhereUniqueInput): Promise<any> {
         try {
@@ -56,6 +57,23 @@ export class AuctionsService {
     async createAuction(data: Prisma.AuctionCreateInput): Promise<Auction> {
         return this.prisma.auction.create({
             data,
+        })
+    }
+
+    async updateAuction(params: {
+        where: Prisma.AuctionWhereUniqueInput;
+        data: Prisma.AuctionUpdateInput;
+    }): Promise<Auction> {
+        const { where, data } = params;
+        return this.prisma.auction.update({
+            data,
+            where,
+        });
+    }
+
+    async deleteAuction(where: Prisma.AuctionWhereUniqueInput): Promise<Auction> {
+        return this.prisma.auction.delete({
+            where,
         })
     }
 }

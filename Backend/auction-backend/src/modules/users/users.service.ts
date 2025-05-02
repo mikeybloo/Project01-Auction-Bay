@@ -1,10 +1,12 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { User, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { BidsService } from '../bids/bids.service';
 
 @Injectable()
 export class UsersService {
-    constructor(private prisma: PrismaService) {}
+    constructor(
+        private prisma: PrismaService) {}
 
     async user(userWhereUniqueInput: Prisma.UserWhereUniqueInput): Promise<any> {
         try {

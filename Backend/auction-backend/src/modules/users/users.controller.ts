@@ -19,12 +19,13 @@ export class UsersController {
 
     @Get()
     @HttpCode(HttpStatus.OK)
-    async findAll(@Query('page') page: number): Promise<User[]> {
-        // Pagination using Prisma. Takes the page number minus one and skips as many elements. 
-        return this.usersService.users({ 
-                skip: page - 1 * 10, // Page 1 = 0 element skips
-                take: 10
-            });
+    async findCurrent(@Req() request: Request): Promise<User[]> {
+        const user = request.user as any;
+        const userId = user.userId;
+
+        return this.usersService.user({ 
+            id: userId
+        });
     }
 
     @Post()
@@ -33,7 +34,7 @@ export class UsersController {
         return this.usersService.createUser(createUser);
     }
 
-    @Post('/auction')
+    @Post('auction')
     @HttpCode(HttpStatus.CREATED)
     async createAuction(@Body() auctionBody: Auction, @Req() request: Request): Promise<Auction> {
         const user = request.user as any;
@@ -46,16 +47,30 @@ export class UsersController {
             published_on: new Date(),
             end_date: auctionBody.end_date,
             active: true,
-            author: userId,
+            author: {
+                connect: { id: userId }
+            },
         });
     }
 
-    @Patch(':id')
+    @Patch('update-password')
     @HttpCode(HttpStatus.OK)
-    async update(@Param('id') id: string, @Body() updateUser: User): Promise<User> {
+    async update(@Body() updateUser: User, @Req() request: Request): Promise<User> {
+        const user = request.user as any;
+        const userId = user.userId;
+
         return this.usersService.updateUser({
-            where: { id },
+            where: { id: userId },
             data: updateUser,
+        })
+    }
+
+    @Patch('auction/:id')
+    @HttpCode(HttpStatus.OK)
+    async updateAuction(@Body() updateAuction: Auction, @Param('id') auctionId: string): Promise<Auction> {
+        return this.auctionsService.updateAuction({
+            where: { id: auctionId },
+            data: updateAuction
         })
     }
 
