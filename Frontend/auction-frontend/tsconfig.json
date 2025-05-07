@@ -1,4 +1,15 @@
 {
+  "compilerOptions": {
+    "target": "es6",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
