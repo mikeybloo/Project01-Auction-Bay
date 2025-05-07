@@ -1,10 +1,13 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query, Req } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { Auction, Bid } from '@prisma/client';
 import { Public } from 'src/decorators/public.decorator';
 import { AuctionsService } from './auctions.service';
 import { BidsService } from '../bids/bids.service';
 import { Request } from 'express';
 import { UsersService } from '../users/users.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { isFileExtensionSafe, removeFile, saveImageToStorage } from 'src/helpers/imageStorage';
+import { join } from 'path';
 
 @Controller('auctions')
 export class AuctionsController {
@@ -59,5 +62,23 @@ export class AuctionsController {
                 connect: { id: user.id }
             }
         });
+    }
+
+    @Post('upload/:id')
+    @UseInterceptors(FileInterceptor('image', saveImageToStorage))
+    @HttpCode(HttpStatus.CREATED)
+    async upload(@UploadedFile() file: Express.Multer.File, @Param('id') productId: string): Promise<Auction> {
+        const filename = file?.filename
+
+        if (!filename) throw new BadRequestException('File must be a png, jpg, or jpeg.')
+
+        const imagesFolderPath = join(process.cwd(), 'files')
+        const fullImagePath = join(imagesFolderPath + '/' + file.filename)
+        if (await isFileExtensionSafe(fullImagePath)) {
+            return this.auctionsService.updateProductImage(productId, filename)
+        }
+
+        removeFile(fullImagePath)
+        throw new BadRequestException('File content does not match extension!')
     }
 }

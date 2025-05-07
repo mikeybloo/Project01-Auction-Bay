@@ -114,4 +114,9 @@ export class UsersService {
             where,
         })
     }
+
+    async updateUserImageId(id: string, avatar: string): Promise<User> {
+        const user = await this.user({ id });
+        return this.updateUser({ where: { id }, data: { avatar }});
+    }
 }

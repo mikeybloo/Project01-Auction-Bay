@@ -1,9 +1,12 @@
-import { BadRequestException, Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, Req } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Auction, User } from '@prisma/client';
 import { AuctionsService } from '../auctions/auctions.service';
 import { Request } from 'express';
 import { AuthService } from '../auth/auth.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { isFileExtensionSafe, removeFile, saveImageToStorage } from 'src/helpers/imageStorage';
+import { join } from 'path';
 
 @Controller('me')
 export class UsersController {
@@ -32,6 +35,24 @@ export class UsersController {
     @HttpCode(HttpStatus.CREATED)
     async create(@Body() createUser: User): Promise<User> {
         return this.usersService.createUser(createUser);
+    }
+
+    @Post('upload/:id')
+    @UseInterceptors(FileInterceptor('avatar', saveImageToStorage))
+    @HttpCode(HttpStatus.CREATED)
+    async upload(@UploadedFile() file: Express.Multer.File, @Param('id') id: string): Promise<User> {
+      const filename = file?.filename
+  
+      if (!filename) throw new BadRequestException('File must be a png, jpg, or jpeg.')
+  
+      const imagesFolderPath = join(process.cwd(), 'files')
+      const fullImagePath = join(imagesFolderPath + '/' + file.filename)
+      if (await isFileExtensionSafe(fullImagePath)) {
+        return this.usersService.updateUserImageId(id, filename)
+      }
+  
+      removeFile(fullImagePath)
+      throw new BadRequestException('File content does not match extension!')
     }
 
     @Post('auction')
