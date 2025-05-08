@@ -77,7 +77,7 @@ export class AuctionsService {
         })
     }
 
-    async updateUserImageId(id: string, image: string): Promise<Auction> {
+    async updateProductImage(id: string, image: string): Promise<Auction> {
         const user = await this.auction({ id });
         return this.updateAuction({ where: { id }, data: { image }});
     }
