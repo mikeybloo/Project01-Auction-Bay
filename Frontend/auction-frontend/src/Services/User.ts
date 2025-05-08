@@ -33,7 +33,7 @@ export const fetchUser = async () =>
   export const updateUser = async (data: UpdateUserFields, id: string) =>
     apiRequest<UpdateUserFields, void>(
       'patch',
-      `${apiRoutes.USERS_PREFIX}/${id}`,
+      `${apiRoutes.USERS_PREFIX}/update-password/${id}`,
       data,
     )
   
