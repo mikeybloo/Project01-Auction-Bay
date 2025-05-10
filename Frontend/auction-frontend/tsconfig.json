@@ -9,6 +9,10 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "baseUrl": "src",
+    "types": ["vite/clinet", "react", "react-dom"]
   },
   "files": [],
   "references": [
