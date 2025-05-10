@@ -1,5 +1,4 @@
 import type { FC } from 'react'
-import './App.css'
 import { usePageIdentification } from './Hooks/usePageIdentification'
 import { observer } from 'mobx-react'
 import Routes from './Routes/Routes'
