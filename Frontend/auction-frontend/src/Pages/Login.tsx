@@ -3,6 +3,51 @@ import { Card, Col, Container, Image, Row } from 'react-bootstrap'
 import LoginForm from '../Components/user/LoginForm'
 import { Link } from 'react-router-dom'
 import { routes } from '../Constants/routesConstants'
+import type { AuctionType } from '../Models/auction'
+import AuctionCard from '../Components/AuctionCard'
+
+const auctions: AuctionType[] =[
+  {
+    id: '1',
+    title: 'Macbook Pro 15 2015',
+    description: 'Used MacBook in good condition',
+    image: '',
+    starting_price: 200,
+    published_on: new Date(),
+    end_date: new Date(Date.now() + 86400000), // +1 day
+    active: true,
+  },
+  {
+    id: '2',
+    title: 'iPad Pro 13inch',
+    description: 'iPad Pro with Apple Pencil',
+    image: '',
+    starting_price: 500,
+    published_on: new Date(),
+    end_date: new Date(Date.now() + 172800000), // +2 days
+    active: true,
+  },
+  {
+    id: '3',
+    title: 'Item 3',
+    description: 'Description of item #3',
+    image: '',
+    starting_price: 100,
+    published_on: new Date(),
+    end_date: new Date(Date.now() + 172800000), // +2 days
+    active: true,
+  },
+  {
+    id: '4',
+    title: 'Item 4',
+    description: 'Description of item #4',
+    image: '',
+    starting_price: 200,
+    published_on: new Date(),
+    end_date: new Date(Date.now() + 172800000), // +2 days
+    active: true,
+  }
+]
 
 const Login: FC = () => {
   return (
@@ -10,7 +55,13 @@ const Login: FC = () => {
       <Container fluid >
         <Row className='min-vh-100'>
           <Col sm={8} style={{ backgroundColor: '#f6f6f4'}}>
-            <Card>meow</Card>
+            <Row className='g-4 p-4'>
+              {auctions.map((auction) => (
+                <Col md={6} key={auction.id}>
+                  <AuctionCard auction={auction} />
+                </Col>
+              ))}
+            </Row>
           </Col>
           <Col sm={4}>
             <div style={{ width: '100%' }}>

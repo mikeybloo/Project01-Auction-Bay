@@ -50,7 +50,32 @@ export class AuctionsService {
         const { skip, take } = params;
         return this.prisma.auction.findMany({
             skip, 
-            take
+            take,
+            include: {
+                bids: {
+                    orderBy: {
+                        offer: 'desc'
+                    },
+                    include: {
+                        author: {
+                            select: {
+                                id: true,
+                                name: true,
+                                surname: true,
+                                avatar: true
+                            }
+                        } 
+                    }
+                },
+                author: {
+                    select: {
+                        id: true,
+                        name: true,
+                        surname: true,
+                        avatar: true
+                    }
+                }
+            }
         });
     }
 
