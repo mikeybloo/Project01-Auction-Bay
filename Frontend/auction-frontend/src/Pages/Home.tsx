@@ -1,20 +1,22 @@
 import type { FC } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Container, Row, Col, Button, Navbar, Nav, Image } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
+import { routes } from '../Constants/routesConstants'
 
 const Home: FC = () => {
   return (
     <>
       <Navbar bg="light" expand="lg" className="px-4">
-        <Navbar.Brand href="#home" className="text-warning fw-bold fs-3"><Image src="public\Logo_Demo.png" alt="Logo" height={75} className="d-inline-block align-top"/></Navbar.Brand>
+        <Navbar.Brand href="#home" className="text-warning fw-bold fs-3"><Image src="public\Logo.png" alt="Logo" height={75} className="d-inline-block align-top"/></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-between">
           <Nav className="me-auto">
           </Nav>
-          <div>
-            <Button variant="link" className="me-2">Log in</Button>
+          <div className='d-flex align-items-center justify-content-center'>
+            <Link to={`${routes.LOGIN}`} className='text-decoration-none text-black fw-bold me-2'>Log in</Link>
             or
-            <Button variant="dark">Sign Up</Button>
+            <Link to={`${routes.SIGNUP}`} className='btn btn-dark rounded-pill ms-2'>Sign Up</Link>
           </div>
         </Navbar.Collapse>
       </Navbar>
