@@ -1,8 +1,89 @@
+import 'bootstrap/dist/css/bootstrap.min.css'
 import type { FC } from 'react'
+import type { AuctionType } from '../Models/auction'
+import { Col, Container, Image, Row } from 'react-bootstrap'
+import AuctionCard from '../Components/AuctionCard'
+import RegisterForm from '../Components/user/RegisterForm'
+import { Link } from 'react-router-dom'
+import { routes } from '../Constants/routesConstants'
+
+const auctions: AuctionType[] =[
+  {
+    id: '1',
+    title: 'Macbook Pro 15 2015',
+    description: 'Used MacBook in good condition',
+    image: '',
+    starting_price: 200,
+    published_on: new Date(),
+    end_date: new Date(Date.now() + 600000),
+    active: true,
+  },
+  {
+    id: '2',
+    title: 'iPad Pro 13inch',
+    description: 'iPad Pro with Apple Pencil',
+    image: '',
+    starting_price: 500,
+    published_on: new Date(),
+    end_date: new Date(Date.now() + 172800000),
+    active: true,
+  },
+  {
+    id: '3',
+    title: 'Item 3',
+    description: 'Description of item #3',
+    image: '',
+    starting_price: 100,
+    published_on: new Date(),
+    end_date: new Date(Date.now() + 172800000),
+    active: true,
+  },
+  {
+    id: '4',
+    title: 'Item 4',
+    description: 'Description of item #4',
+    image: '',
+    starting_price: 200,
+    published_on: new Date(),
+    end_date: new Date(Date.now() + 172800000),
+    active: true,
+  }
+]
 
 const Register: FC = () => {
   return (
-    <h1>REGISTER</h1>
+    <>
+      <Container fluid >
+        <Row className='min-vh-100'>
+          <Col sm={8} style={{ backgroundColor: '#f6f6f4'}}>
+            <Row className='g-4 p-4'>
+              {auctions.map((auction) => (
+                <Col md={6} key={auction.id}>
+                  <AuctionCard auction={auction} />
+                </Col>
+              ))}
+            </Row>
+          </Col>
+          <Col sm={4}>
+            <div style={{ width: '100%' }}>
+              <div className='align-items-center d-flex flex-column' style={{ height: '300px'}}>
+                <Image src="\Logo.png" alt="Logo" height={100} width={100} className="d-inline-block p-3 my-5"/>
+                <div className='text-center' style={{ marginTop: 'auto'}}>
+                  <h3 className='mt-5 fw-bold'>Hello!</h3>
+                  <p className='text-muted'>Please enter your details</p>
+                </div>
+              </div>
+              <div className='w-100 px-5 mt-5'>
+                  <RegisterForm />
+              </div>
+              <div className='w-100 align-items-center d-flex flex-column' style={{ height: '150px'}}>
+                <small className='text-muted' style={{ marginTop: 'auto'}}>Already have an account? <Link to={`${routes.LOGIN}`} className='fw-bold text-black text-decoration-none'>Log In</Link></small >
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </>
   )
 }
 

@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import type { FC } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Form } from 'react-bootstrap'
 import { useLoginForm } from '../../Hooks/react-hook-form/useLogin'
 import type { LoginUserFields } from '../../Hooks/react-hook-form/useLogin'
@@ -8,7 +8,6 @@ import ToastContainer from 'react-bootstrap/ToastContainer'
 import Toast from 'react-bootstrap/Toast'
 import { Controller } from 'react-hook-form'
 import { FormLabel } from 'react-bootstrap'
-import { routes } from '../../Constants/routesConstants'
 import Button from 'react-bootstrap/Button'
 import * as API from '../../Services/Api'
 import { statusCode } from '../../Constants/errorConstants'
@@ -32,7 +31,7 @@ const LoginForm: FC = () => {
       setShowError(true)
     } else {
       authStore.login(response.data)
-      navigate('/')
+      navigate('/profile/myauctions')
     }
   })
 
@@ -87,7 +86,7 @@ const LoginForm: FC = () => {
             </Form.Group>
           )}
         />
-        <Button className="w-100 mt-4" type="submit" style={{ backgroundColor: '#f4ff47', color: 'black' }}>
+        <Button className="w-100 mt-4" type="submit" style={{ backgroundColor: '#f4ff47', color: 'black', border: 'none', fontWeight: '600' }}>
           Login
         </Button>
       </Form>

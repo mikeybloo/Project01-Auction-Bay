@@ -7,7 +7,7 @@ import React from 'react'
 
 const RestrictedRoute: FC<RouteProps> = ({ children }: RouteProps) => {
   if (authStore.user) {
-    return <Navigate to="/" />
+    return <Navigate to="/profile/myauctions" />
   }
   return children as React.JSX.Element
 }

@@ -1,4 +1,3 @@
-import React from 'react'
 import type { FC } from 'react'
 import type { AuctionType } from '../Models/auction'
 
@@ -23,7 +22,7 @@ const AuctionCard: FC<Props> = ({ auction }) => {
                 <div style={{backgroundColor: '#f9ff90', borderRadius: '20px', fontWeight: 'lighter', paddingLeft: '10px', paddingRight: '10px', fontSize: '12px'}}>In progress</div>
                 <div style={{backgroundColor: timeTagColor, borderRadius: '20px', fontWeight: 'lighter', paddingLeft: '5px', paddingRight: '5px', fontSize: '12px', display: 'inline-flex', alignItems: 'center'}}>
                     {timeText}
-                    <img src='public\clock.png' style={{ height: '12px', verticalAlign: 'middle', marginLeft: '3px' }}/>
+                    <img src='\clock.png' style={{ height: '12px', verticalAlign: 'middle', marginLeft: '3px' }}/>
                 </div>
             </div>
             <div className="text-muted" style={{ marginTop: '8px', marginLeft: '8px', marginRight: '8px', color: '#071015' }}>

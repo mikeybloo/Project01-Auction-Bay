@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap.min.css'
 import type { FC } from 'react'
 import Layout from '../../Components/Layout'
 

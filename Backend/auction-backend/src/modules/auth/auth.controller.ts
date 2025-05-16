@@ -35,7 +35,7 @@ export class AuthController {
     @Get()
     @HttpCode(HttpStatus.OK)
     async user(@Req() req: Request): Promise<User> {
-        const cookie = req.cookies['acccess_token'];
+        const cookie = req.cookies['access_token'];
         return this.authService.user(cookie);
     }
 

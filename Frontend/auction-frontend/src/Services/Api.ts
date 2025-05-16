@@ -10,8 +10,9 @@ export async function apiRequest<D = Record<string, unknown>, R = unknown>(
   } & AxiosRequestConfig,
 ) {
   try {
+    console.log('oh shit its trying!')
     const response = await Axios.request<R>({
-      baseURL: process.env.REACT_APP_API_URL,
+      baseURL: import.meta.env.VITE_API_URL,
       url: path,
       method: method,
       data: input,
@@ -19,8 +20,8 @@ export async function apiRequest<D = Record<string, unknown>, R = unknown>(
       withCredentials: true,
     })
     return response
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
+    console.log(error)
     return error.response
   }
 }

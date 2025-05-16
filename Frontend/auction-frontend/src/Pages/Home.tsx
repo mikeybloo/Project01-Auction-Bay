@@ -8,7 +8,7 @@ const Home: FC = () => {
   return (
     <>
       <Navbar bg="light" expand="lg" className="px-4">
-        <Navbar.Brand href="#home" className="text-warning fw-bold fs-3"><Image src="public\Logo.png" alt="Logo" height={75} className="d-inline-block align-top"/></Navbar.Brand>
+        <Navbar.Brand href="#home" className="text-warning fw-bold fs-3"><Image src="\Logo.png" alt="Logo" height={75} className="d-inline-block align-top"/></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-between">
           <Nav className="me-auto">
@@ -34,7 +34,7 @@ const Home: FC = () => {
       <Container className="py-5">
         <Row className="g-4">
           <Col>
-            <Image src="public\Auctions_Demo.png" rounded />
+            <Image src="\Auctions_Demo.png" rounded />
           </Col>
         </Row>
       </Container>

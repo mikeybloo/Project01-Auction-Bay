@@ -1,5 +1,6 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import type { FC } from 'react'
-import { Card, Col, Container, Image, Row } from 'react-bootstrap'
+import { Col, Container, Image, Row } from 'react-bootstrap'
 import LoginForm from '../Components/user/LoginForm'
 import { Link } from 'react-router-dom'
 import { routes } from '../Constants/routesConstants'
@@ -14,7 +15,7 @@ const auctions: AuctionType[] =[
     image: '',
     starting_price: 200,
     published_on: new Date(),
-    end_date: new Date(Date.now() + 600000), // +1 day
+    end_date: new Date(Date.now() + 600000),
     active: true,
   },
   {
@@ -24,7 +25,7 @@ const auctions: AuctionType[] =[
     image: '',
     starting_price: 500,
     published_on: new Date(),
-    end_date: new Date(Date.now() + 172800000), // +2 days
+    end_date: new Date(Date.now() + 172800000),
     active: true,
   },
   {
@@ -34,7 +35,7 @@ const auctions: AuctionType[] =[
     image: '',
     starting_price: 100,
     published_on: new Date(),
-    end_date: new Date(Date.now() + 172800000), // +2 days
+    end_date: new Date(Date.now() + 172800000),
     active: true,
   },
   {
@@ -44,7 +45,7 @@ const auctions: AuctionType[] =[
     image: '',
     starting_price: 200,
     published_on: new Date(),
-    end_date: new Date(Date.now() + 172800000), // +2 days
+    end_date: new Date(Date.now() + 172800000),
     active: true,
   }
 ]
