@@ -23,10 +23,13 @@ export class AuthController {
     @UseGuards(LocalAuthGuard)
     @Post('login')
     @HttpCode(HttpStatus.OK)
-    async login(@Req() req: RequestWithUser, @Res({ passthrough: true }) res: Response): Promise<User> {
+    async login(@Req() req: RequestWithUser, @Res({ passthrough: true }) res: Response): Promise<any> {
         const access_token = await this.authService.generateJwt(req.user);
         res.cookie('access_token', access_token, { httpOnly: true });
-        return req.user;
+
+        const { password, ...userWithoutPassword } = req.user; 
+
+        return userWithoutPassword;
     }
 
     @Get()
