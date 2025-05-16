@@ -14,7 +14,7 @@ const auctions: AuctionType[] =[
     image: '',
     starting_price: 200,
     published_on: new Date(),
-    end_date: new Date(Date.now() + 86400000), // +1 day
+    end_date: new Date(Date.now() + 600000), // +1 day
     active: true,
   },
   {
