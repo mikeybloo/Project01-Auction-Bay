@@ -6,6 +6,7 @@ type Props = {
 }
 
 const AuctionCard: FC<Props> = ({ auction }) => {
+    //Calculate time remaining until auction ends
     const remaining = auction.end_date.getTime() - auction.published_on.getTime();
     var timeText = '';
     var timeTagColor = '';

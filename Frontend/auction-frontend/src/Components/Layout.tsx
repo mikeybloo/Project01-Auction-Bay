@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from 'react'
-import Navbar from './Navbar'
+import Navigation from './Navigation'
 
 interface Props {
   children: ReactNode | ReactNode[]
@@ -8,7 +8,7 @@ interface Props {
 const Layout: FC<Props> = ({ children }) => {
   return (
     <>
-      <Navbar />
+      <Navigation />
       <div className="layout-container container-xxl p-4">{children}</div>
     </>
   )

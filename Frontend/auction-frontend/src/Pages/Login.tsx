@@ -67,7 +67,7 @@ const Login: FC = () => {
           <Col sm={4}>
             <div style={{ width: '100%' }}>
               <div className='align-items-center d-flex flex-column' style={{ height: '400px'}}>
-                <Image src="public\Logo.png" alt="Logo" height={100} width={100} className="d-inline-block p-3 my-5"/>
+                <Image src="\Logo.png" alt="Logo" height={100} width={100} className="d-inline-block p-3 my-5"/>
                 <div className='text-center' style={{ marginTop: 'auto'}}>
                   <h3 className='mt-5 fw-bold'>Welcome back!</h3>
                   <p className='text-muted'>Please enter your details</p>

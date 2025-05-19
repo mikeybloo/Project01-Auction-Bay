@@ -3,7 +3,8 @@ export const routes = {
     SIGNUP: '/signup',
     HOME: '/',
     AUCTIONS: '/auctions',
-    AUCTION: '/auction'
+    AUCTION: '/auction',
+    PROFILE: '/profile'
 } as const;
 
 export type Routes = keyof typeof routes;

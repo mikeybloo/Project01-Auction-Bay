@@ -30,6 +30,7 @@ const LoginForm: FC = () => {
       setApiError(response.data.message)
       setShowError(true)
     } else {
+      console.log(JSON.stringify(response.data))
       authStore.login(response.data)
       navigate('/profile/myauctions')
     }

@@ -61,24 +61,24 @@ const RegisterForm: FC = () => {
         <Row>
             <Controller
                 control={control}
-                name="first_name"
+                name="name"
                 render={({ field }) => (
                     <Form.Group as={Col} className="mb-3">
-                    <FormLabel htmlFor="first_name">First name</FormLabel>
+                    <FormLabel htmlFor="name">First name</FormLabel>
                     <input
                         {...field}
                         value={field.value ?? ''}
                         placeholder='First name (optional)'
                         type="text"
-                        aria-label="First name"
-                        aria-describedby="first_name"
+                        aria-label="Name"
+                        aria-describedby="name"
                         className={
-                        errors.first_name ? 'form-control is-invalid' : 'form-control'
+                        errors.name ? 'form-control is-invalid' : 'form-control'
                         }
                     />
-                    {errors.first_name && (
+                    {errors.name && (
                         <div className="invalid-feedback text-danger">
-                        {errors.first_name.message}
+                        {errors.name.message}
                         </div>
                     )}
                     </Form.Group>
@@ -86,24 +86,24 @@ const RegisterForm: FC = () => {
             />
             <Controller
                 control={control}
-                name="last_name"
+                name="surname"
                 render={({ field }) => (
                     <Form.Group as={Col} className="mb-3">
-                        <FormLabel htmlFor="last_name">Last name</FormLabel>
+                        <FormLabel htmlFor="surname">Last name</FormLabel>
                         <input
                             {...field}
                             value={field.value ?? ''}
                             placeholder='Last name (optional)'
                             type="text"
                             aria-label="Last name"
-                            aria-describedby="last_name"
+                            aria-describedby="surname"
                             className={
-                            errors.last_name ? 'form-control is-invalid' : 'form-control'
+                            errors.surname ? 'form-control is-invalid' : 'form-control'
                             }
                         />
-                        {errors.last_name && (
+                        {errors.surname && (
                             <div className="invalid-feedback text-danger">
-                            {errors.last_name.message}
+                            {errors.surname.message}
                             </div>
                         )}
                     </Form.Group>

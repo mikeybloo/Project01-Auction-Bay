@@ -5,6 +5,7 @@ import type { RouteProps } from 'react-router-dom'
 
 import PrivateRoute from './PrivateRoute'
 import RestrictedRoute from './RestrictedRoute'
+import Auctions from '../Pages/Auctions'
 
 export const RouteType = {
     PUBLIC: 0,
@@ -59,6 +60,11 @@ export const AppRoutes: AppRoute[] = [
         type: RouteType.PRIVATE,
         path: '/profile/won',
         children: <ProfileWon />,
+    },
+    {
+        type: RouteType.PRIVATE,
+        path: '/auctions',
+        children: <Auctions />,
     },
     {
         type: RouteType.PRIVATE,
