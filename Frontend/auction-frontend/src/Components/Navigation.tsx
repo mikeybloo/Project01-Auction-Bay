@@ -1,11 +1,21 @@
-import type { FC } from 'react'
-import { Button, ButtonGroup, Container, Image, Navbar } from 'react-bootstrap'
+import { useState, type FC } from 'react'
+import { Button, ButtonGroup, Container, Image, Modal, Navbar, Toast, ToastContainer } from 'react-bootstrap'
 import authStore from '../Stores/auth.store'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { routes } from '../Constants/routesConstants'
+import * as API from '../Services/Api'
+import { statusCode } from '../Constants/errorConstants'
 
 const Navigation: FC = () => {
+  const [apiError, setApiError] = useState('')
+  const [showError, setShowError] = useState(false)
+  const navigate = useNavigate();
+
+  const [showProfile, setShowProfile] = useState(false)
+  const handleCloseProfile = () => setShowProfile(false);
+  const handleShowProfile = () => setShowProfile(true);
+
   const location = useLocation();
   const currentPath = location.pathname;
   var avatarImagePath = "";
@@ -14,6 +24,19 @@ const Navigation: FC = () => {
     avatarImagePath = '/Default_User.png';
   }
 
+  const signout = async () => {
+    const response = await API.signout()
+    if(response.data?.statusCode === statusCode.BAD_REQUEST) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else if(response.data?.statusCode === statusCode.INTERNAL_SERVER_ERROR) {
+      setApiError(response.data.message)
+      setShowError(true)
+    } else {
+      authStore.signout()
+      navigate('/')
+    }
+  }
 
   return (
     <>
@@ -37,10 +60,28 @@ const Navigation: FC = () => {
           </div>
           <ButtonGroup className='bg-white rounded-pill ms-4' style={{ height: '50px' }}>
             <Button className='rounded-pill text-black d-flex align-items-center' style={{ backgroundColor: '#f4ff47', borderColor: '#f4ff47', width: '50px' }}><span style={{ fontWeight: '300', fontSize: '30px', marginBottom: '5px', marginLeft: '2px' }}>+</span></Button>
-            <Button className='rounded-pill bg-white border-black ms-1 d-flex align-items-center'><img src={avatarImagePath} height={25}/></Button>
+            <Button onClick={handleShowProfile} className='rounded-pill bg-white border-black ms-1 d-flex align-items-center'><img src={avatarImagePath} height={25}/></Button>
           </ButtonGroup>
         </Container>
       </Navbar>
+
+      <Modal show={showProfile} onHide={handleCloseProfile}>
+        <Modal.Header closeButton>
+          <Modal.Title>Profile settings</Modal.Title>
+        </Modal.Header>
+        <Modal.Body><Button className="btn btn-dark" onClick={signout}>Sign out</Button></Modal.Body>
+      </Modal>
+      
+      {showError && (
+        <ToastContainer className="p-3" position="top-end">
+          <Toast onClose={() => setShowError(false)} show={showError}>
+            <Toast.Header>
+              <strong className="me-suto text-danger">Error</strong>
+            </Toast.Header>
+            <Toast.Body className="text-danger bg-light">{apiError}</Toast.Body>
+          </Toast>
+        </ToastContainer>
+      )}
     </>
   )
 }

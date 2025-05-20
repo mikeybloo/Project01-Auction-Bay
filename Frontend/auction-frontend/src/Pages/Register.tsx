@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import type { FC } from 'react'
 import type { AuctionType } from '../Models/auction'
 import { Col, Container, Image, Row } from 'react-bootstrap'
-import AuctionCard from '../Components/AuctionCard'
+import AuctionCardDemo from '../Components/AuctionCardDemo'
 import RegisterForm from '../Components/user/RegisterForm'
 import { Link } from 'react-router-dom'
 import { routes } from '../Constants/routesConstants'
@@ -17,6 +17,8 @@ const auctions: AuctionType[] =[
     published_on: new Date(),
     end_date: new Date(Date.now() + 600000),
     active: true,
+    authorId: "",
+    bids: []
   },
   {
     id: '2',
@@ -27,6 +29,8 @@ const auctions: AuctionType[] =[
     published_on: new Date(),
     end_date: new Date(Date.now() + 172800000),
     active: true,
+    authorId: "",
+    bids: []
   },
   {
     id: '3',
@@ -37,6 +41,8 @@ const auctions: AuctionType[] =[
     published_on: new Date(),
     end_date: new Date(Date.now() + 172800000),
     active: true,
+    authorId: "",
+    bids: []
   },
   {
     id: '4',
@@ -47,6 +53,8 @@ const auctions: AuctionType[] =[
     published_on: new Date(),
     end_date: new Date(Date.now() + 172800000),
     active: true,
+    authorId: "",
+    bids: []
   }
 ]
 
@@ -59,7 +67,7 @@ const Register: FC = () => {
             <Row className='g-4 p-4'>
               {auctions.map((auction) => (
                 <Col md={6} key={auction.id}>
-                  <AuctionCard auction={auction} />
+                  <AuctionCardDemo auction={auction} />
                 </Col>
               ))}
             </Row>
