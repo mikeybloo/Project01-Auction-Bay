@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Auction, User } from '@prisma/client';
 import { AuctionsService } from '../auctions/auctions.service';
@@ -37,23 +37,25 @@ export class UsersController {
         return this.usersService.createUser(createUser);
     }
 
-    @Post('upload/:id')
+    @Post('upload')
     @UseInterceptors(FileInterceptor('avatar', saveImageToStorage))
     @HttpCode(HttpStatus.CREATED)
-    async upload(@UploadedFile() file: Express.Multer.File, @Param('id') id: string): Promise<User> {
-        //TODO: strip id from params and get userId from request body
-      const filename = file?.filename
-  
-      if (!filename) throw new BadRequestException('File must be a png, jpg, or jpeg.')
-  
-      const imagesFolderPath = join(process.cwd(), 'files')
-      const fullImagePath = join(imagesFolderPath + '/' + file.filename)
-      if (await isFileExtensionSafe(fullImagePath)) {
-        return this.usersService.updateUserImageId(id, filename)
-      }
-  
-      removeFile(fullImagePath)
-      throw new BadRequestException('File content does not match extension!')
+    async upload(@UploadedFile() file: Express.Multer.File, @Req() request: Request): Promise<User> {
+        const user = await this.usersService.currentUser(request.cookies['access_token']);
+        const id = user.id;
+        
+        const filename = file?.filename
+    
+        if (!filename) throw new BadRequestException('File must be a png, jpg, or jpeg.')
+    
+        const imagesFolderPath = join(process.cwd(), 'files')
+        const fullImagePath = join(imagesFolderPath + '/' + file.filename)
+        if (await isFileExtensionSafe(fullImagePath)) {
+            return this.usersService.updateUserImageId(id, filename)
+        }
+    
+        removeFile(fullImagePath)
+        throw new BadRequestException('File content does not match extension!')
     }
 
     @Post('auction')
@@ -112,8 +114,14 @@ export class UsersController {
 
     @Patch('auction/:id')
     @HttpCode(HttpStatus.OK)
-    async updateAuction(@Body() updateAuction: Auction, @Param('id') auctionId: string): Promise<Auction> {
-        //TODO: add safeguard to check if request userId matches with authorId in the auction to prevent users from changing other users' auctions
+    async updateAuction(@Body() updateAuction: Auction, @Param('id') auctionId: string, @Req() request: Request): Promise<Auction> {
+        const auction: Auction = await this.auctionsService.auction({ id: auctionId });
+        const user = await this.usersService.currentUser(request.cookies['access_token']);
+        
+        if(auction.authorId !== user.id) {
+            throw new ForbiddenException('Modifications to this auction are forbidden!')
+        }
+
         return this.auctionsService.updateAuction({
             where: { id: auctionId },
             data: updateAuction
