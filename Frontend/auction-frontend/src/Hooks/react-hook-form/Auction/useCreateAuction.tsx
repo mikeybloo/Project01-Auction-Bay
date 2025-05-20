@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
-import type { AuctionType } from '../../../Models/auction'
 
 export interface CreateAuctionFields {
     title: string
@@ -10,16 +9,18 @@ export interface CreateAuctionFields {
     end_date: Date
 }
 
-interface Props {
-  defaultValues?: AuctionType
-}
-
-export const useCreateAuctionForm = ({ defaultValues }: Props) => {
+export const useCreateAuctionForm = () => {
   const CreateAuctionSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
     description: Yup.string().required('Description is required'),
-    price: Yup.number().required('Price is required'),
-    end_date: Yup.date().required('End date is required')
+    starting_price: Yup.number().required('Price is required').min(
+      1,
+      'The price has to be at least 1 eur'
+    ),
+    end_date: Yup.date().required('End date is required').min(
+      new Date(Date.now() + 86400000) ,
+      'End date has to be at least a DAY after current date'
+    )
   })
 
   const {
@@ -30,9 +31,8 @@ export const useCreateAuctionForm = ({ defaultValues }: Props) => {
     defaultValues: {
       title: '',
       description: '',
-      price: 0,
-      end_date: new Date(),
-      ...defaultValues,
+      starting_price: 0,
+      end_date: new Date()
     },
     mode: 'onSubmit',
     resolver: yupResolver(CreateAuctionSchema),

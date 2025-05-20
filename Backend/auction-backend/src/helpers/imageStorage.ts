@@ -1,4 +1,3 @@
-//const FileType = import('file-type')
 import fs from 'fs'
 import { diskStorage, Options } from 'multer'
 import { extname } from 'path'

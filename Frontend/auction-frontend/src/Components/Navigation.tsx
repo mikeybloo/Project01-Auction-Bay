@@ -6,15 +6,20 @@ import { Link } from 'react-router-dom'
 import { routes } from '../Constants/routesConstants'
 import * as API from '../Services/Api'
 import { statusCode } from '../Constants/errorConstants'
+import CreateAuctionForm from './CreateAuctionForm'
 
 const Navigation: FC = () => {
-  const [apiError, setApiError] = useState('')
-  const [showError, setShowError] = useState(false)
+  const [apiError, setApiError] = useState('');
+  const [showError, setShowError] = useState(false);
   const navigate = useNavigate();
 
-  const [showProfile, setShowProfile] = useState(false)
+  const [showProfile, setShowProfile] = useState(false);
   const handleCloseProfile = () => setShowProfile(false);
   const handleShowProfile = () => setShowProfile(true);
+
+  const [showAuctionForm, setShowAuctionForm] = useState(false);
+  const handleCloseAuctionForm = () => setShowAuctionForm(false);
+  const handleShowAuctionForm = () => setShowAuctionForm(true);
 
   const location = useLocation();
   const currentPath = location.pathname;
@@ -59,7 +64,7 @@ const Navigation: FC = () => {
             </ButtonGroup>
           </div>
           <ButtonGroup className='bg-white rounded-pill ms-4' style={{ height: '50px' }}>
-            <Button className='rounded-pill text-black d-flex align-items-center' style={{ backgroundColor: '#f4ff47', borderColor: '#f4ff47', width: '50px' }}><span style={{ fontWeight: '300', fontSize: '30px', marginBottom: '5px', marginLeft: '2px' }}>+</span></Button>
+            <Button onClick={handleShowAuctionForm} className='rounded-pill text-black d-flex align-items-center' style={{ backgroundColor: '#f4ff47', borderColor: '#f4ff47', width: '50px' }}><span style={{ fontWeight: '300', fontSize: '30px', marginBottom: '5px', marginLeft: '2px' }}>+</span></Button>
             <Button onClick={handleShowProfile} className='rounded-pill bg-white border-black ms-1 d-flex align-items-center'><img src={avatarImagePath} height={25}/></Button>
           </ButtonGroup>
         </Container>
@@ -70,6 +75,15 @@ const Navigation: FC = () => {
           <Modal.Title>Profile settings</Modal.Title>
         </Modal.Header>
         <Modal.Body><Button className="btn btn-dark" onClick={signout}>Sign out</Button></Modal.Body>
+      </Modal>
+
+      <Modal show={showAuctionForm} onHide={handleCloseAuctionForm}>
+        <Modal.Header>
+          <Modal.Title><h5 className='fw-bold'>Add auction</h5></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <CreateAuctionForm />
+        </Modal.Body>
       </Modal>
       
       {showError && (

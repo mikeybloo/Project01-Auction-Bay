@@ -21,7 +21,7 @@ const AuctionCard: FC<Props> = ({ auction, user }) => {
     if (auction.image == null || auction.image == "") {
         imageUrl = 'https://e.snmc.io/i/600/s/cab1e2c39ec226ff402e086ec94d4189/5143549/agalloch-the-mantle-Cover-Art.jpg';
     } else {
-        imageUrl = auction.image;
+        imageUrl = `${import.meta.env.VITE_API_URL}/files/${auction.image}`;
     }
 
     //Set status tag
