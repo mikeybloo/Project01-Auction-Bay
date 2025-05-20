@@ -41,6 +41,7 @@ export class UsersController {
     @UseInterceptors(FileInterceptor('avatar', saveImageToStorage))
     @HttpCode(HttpStatus.CREATED)
     async upload(@UploadedFile() file: Express.Multer.File, @Param('id') id: string): Promise<User> {
+        //TODO: strip id from params and get userId from request body
       const filename = file?.filename
   
       if (!filename) throw new BadRequestException('File must be a png, jpg, or jpeg.')
@@ -75,10 +76,29 @@ export class UsersController {
 
     @Patch('update-password')
     @HttpCode(HttpStatus.OK)
-    async update(@Body() updateUser: User, @Req() request: Request): Promise<User> {
+    async updatePassword(@Body() passwords: any, @Req() request: Request): Promise<User> {
         try{
-            const user = request.user as any;
-            const userId = user.userId;
+            const user = await this.usersService.currentUser(request.cookies['access_token']);
+            const userId = user.id;
+
+            return this.usersService.updateUser({
+                where: { id: userId },
+                data: {
+                    password: passwords.newPassword
+                },
+            })
+        } catch (err) {
+            console.log(err)
+            throw new BadRequestException('Something went wrong while updating the user data.')
+        }
+    }
+
+    @Patch('update')
+    @HttpCode(HttpStatus.OK)
+    async update(@Body() updateUser: any, @Req() request: Request): Promise<User> {
+        try{
+            const user = await this.usersService.currentUser(request.cookies['access_token']);
+            const userId = user.id;
 
             return this.usersService.updateUser({
                 where: { id: userId },
@@ -93,6 +113,7 @@ export class UsersController {
     @Patch('auction/:id')
     @HttpCode(HttpStatus.OK)
     async updateAuction(@Body() updateAuction: Auction, @Param('id') auctionId: string): Promise<Auction> {
+        //TODO: add safeguard to check if request userId matches with authorId in the auction to prevent users from changing other users' auctions
         return this.auctionsService.updateAuction({
             where: { id: auctionId },
             data: updateAuction
