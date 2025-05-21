@@ -22,12 +22,7 @@ const CreateAuctionForm: FC = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | undefined>('');
-  const [fileError, setFileError] = useState(false);
-
-  const handleFileError = () => {
-    if (!file) setFileError(true);
-    else setFileError(false);
-  }
+  //const [fileError, setFileError] = useState(false);
 
   const handleFileChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     if(target.files) {
@@ -81,7 +76,7 @@ const CreateAuctionForm: FC = () => {
             setApiError(fileResponse.data.message)
             setShowError(true)
         } else {
-            navigate('/profile/myauctions');
+            navigate('/auctions');
         }
     }
   })
@@ -105,7 +100,7 @@ const CreateAuctionForm: FC = () => {
                 type="file"
                 aria-label="Product image"
                 aria-describedby="image"
-                className={fileError ? 'form-control is-invalid' : 'form-control'}
+                className='form-control'
                 style={{ display: 'none' }}
               />
               <div style={{ width: '100%', height: '150px', backgroundColor: '#f6f6f4', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

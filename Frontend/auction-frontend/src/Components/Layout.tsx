@@ -9,7 +9,7 @@ const Layout: FC<Props> = ({ children }) => {
   return (
     <>
       <Navigation />
-      <div className="layout-container container-xxl p-4">{children}</div>
+      <div className="layout-container p-4">{children}</div>
     </>
   )
 }

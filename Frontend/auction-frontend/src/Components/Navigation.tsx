@@ -60,7 +60,12 @@ const Navigation: FC = () => {
                   <Button className='rounded-pill bg-black border-black text-white d-flex align-items-center'><img src="\Home_White.png" height={15} className='me-2' style={{ verticalAlign: "middle" }}/><Link to={routes.AUCTIONS} className='text-decoration-none text-white'>Auctions</Link></Button>
                   <Button className='rounded-pill bg-transparent border-white ms-1 d-flex align-items-center'><img src="\Profile_Black.png" height={15} className='me-2'/><Link to={`${routes.PROFILE}/myauctions`} className='text-decoration-none text-black'>Profile</Link></Button>
                 </>
-              ) : null}
+              ) : (
+                <>
+                  <Button className='rounded-pill bg-transparent border-white d-flex align-items-center'><img src="\Home_Black.png" height={15} className='me-2' style={{ verticalAlign: "middle" }}/><Link to={routes.AUCTIONS} className='text-decoration-none text-black'>Auctions</Link></Button>
+                  <Button className='rounded-pill bg-transparent border-white ms-1 d-flex align-items-center'><img src="\Profile_Black.png" height={15} className='me-2'/><Link to={`${routes.PROFILE}/myauctions`} className='text-decoration-none text-black'>Profile</Link></Button>
+                </>
+              )}
             </ButtonGroup>
           </div>
           <ButtonGroup className='bg-white rounded-pill ms-4' style={{ height: '50px' }}>

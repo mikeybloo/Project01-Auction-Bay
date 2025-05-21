@@ -30,23 +30,21 @@ const Auctions: FC = () => {
         },
     )
 
-    console.log(data?.data)
-
     return (
         <Layout>
             <h1 className='fw-bold'>Auctions</h1>
             {isLoading ? (
                 <div>Loading auctions...</div>
             ) : (
-                <>
-                    <Row className='g-4 p-4'>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Row className='g-5 p-4'>
                         {Array.isArray(data?.data) && data?.data.map((auction: AuctionType) => (
-                            <Col md={6} key={auction.id}>
+                            <Col xs={12} sm={6} md={4} lg={2} key={auction.id}>
                                 <AuctionCard auction={auction} user={authStore.user}/>
                             </Col>
                         ))}
                     </Row>
-                </>
+                </div>
             )}
             {showError && (
                 <ToastContainer className="p-3" position="top-end">

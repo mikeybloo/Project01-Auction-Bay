@@ -3,7 +3,7 @@ import type { AuctionType } from '../Models/auction'
 import type { UserType } from '../Models/auth'
 import { Link } from 'react-router-dom'
 import { routes } from '../Constants/routesConstants'
-import { Button } from 'react-bootstrap'
+import { Button, Image } from 'react-bootstrap'
 
 type Props = {
     auction: AuctionType
@@ -83,10 +83,11 @@ const AuctionCard: FC<Props> = ({ auction, user }) => {
                 {auction.authorId === user?.id && status.text !== 'Done' && (
                     <>
                         <div style={{ position: 'absolute', bottom: '8px', right: '8px', display: 'flex', gap: '8px' }}>
-                            <Button>
-                                Delete
+                            <Button variant='dark' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <Image src="/Trash.png" style={{ height: '15px' }} />
                             </Button>
-                            <Button>
+                            <Button variant='light' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <Image src="/Edit.png" className='me-1' style={{ height: '15px' }} />
                                 Edit
                             </Button>
                         </div>

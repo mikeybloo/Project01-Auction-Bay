@@ -3,15 +3,19 @@ import { apiRequest } from './Api'
 import type { AuctionType } from '../Models/auction'
 import type { UpdateUserFields } from '../Hooks/react-hook-form/useUpdateUser'
 import type { CreateAuctionFields } from '../Hooks/react-hook-form/Auction/useCreateAuction'
+import type { CreateBidFields } from '../Hooks/react-hook-form/useCreateBid'
 
 export const fetchAuction = async (id: string) =>
-    apiRequest<undefined, AuctionType>('get', `${apiRoutes.AUCTION_PREFIX}/${id}`)
+    apiRequest<undefined, AuctionType>('get', `${apiRoutes.AUCTIONS_PREFIX}/${id}`)
   
   export const fetchAuctions = async (pageNumber: number) =>
     apiRequest<number, AuctionType[]>(
       'get',
       `${apiRoutes.AUCTIONS_PREFIX}?page=${pageNumber}`,
     )
+
+  export const postBid = async (data: CreateBidFields, id: string) =>
+    apiRequest<CreateBidFields, void>('post', `${apiRoutes.AUCTIONS_PREFIX}/${id}/bid`, data)
 
   export const postAuction = async (data: CreateAuctionFields) => 
     apiRequest<CreateAuctionFields, void>('post', `${apiRoutes.USERS_PREFIX}/auction`, data)
