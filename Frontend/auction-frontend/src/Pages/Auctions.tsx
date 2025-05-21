@@ -32,7 +32,7 @@ const Auctions: FC = () => {
 
     return (
         <Layout>
-            <h1 className='fw-bold'>Auctions</h1>
+            <h2 className='fw-bold'>Auctions</h2>
             {isLoading ? (
                 <div>Loading auctions...</div>
             ) : (

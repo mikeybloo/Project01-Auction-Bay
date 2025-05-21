@@ -28,9 +28,7 @@ const Register = lazy(() => import('../Pages/Register'))
 
 //Private routes
 const Auction = lazy(() => import('../Pages/Auction'))
-const ProfileBidding = lazy(() => import('../Pages/Profile/Bidding'))
-const ProfileMyAuctions = lazy(() => import('../Pages/Profile/MyAuctions'))
-const ProfileWon = lazy(() => import('../Pages/Profile/Won'))
+const Profile = lazy(() => import('../Pages/Profile/Profile'))
 
 //Error routes
 const Page404 = lazy(() => import('../Pages/Page404'))
@@ -48,18 +46,8 @@ export const AppRoutes: AppRoute[] = [
     },
     {
         type: RouteType.PRIVATE,
-        path: '/profile/bidding',
-        children: <ProfileBidding />,
-    },
-    {
-        type: RouteType.PRIVATE,
-        path: '/profile/myauctions',
-        children: <ProfileMyAuctions />,
-    },
-    {
-        type: RouteType.PRIVATE,
-        path: '/profile/won',
-        children: <ProfileWon />,
+        path: '/profile',
+        children: <Profile />,
     },
     {
         type: RouteType.PRIVATE,

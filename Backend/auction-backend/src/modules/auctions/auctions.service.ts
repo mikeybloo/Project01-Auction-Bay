@@ -43,7 +43,43 @@ export class AuctionsService {
         }
     }
 
-    async auctions(params: {
+    async auctions(auctionWhereInput: Prisma.AuctionWhereInput): Promise<Auction[]> {
+        try {
+            return this.prisma.auction.findMany({ 
+                where: auctionWhereInput,
+                include: {
+                    bids: {
+                        orderBy: {
+                            offer: 'desc'
+                        },
+                        include: {
+                            author: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    surname: true,
+                                    avatar: true
+                                }
+                            } 
+                        }
+                    },
+                    author: {
+                        select: {
+                            id: true,
+                            name: true,
+                            surname: true,
+                            avatar: true
+                        }
+                    }
+                }
+            });
+        } catch (err) {
+            console.log(err);
+            throw new BadRequestException('Something went wrong while finding the auction')
+        }
+    }
+
+    async auctionsPaginated(params: {
         skip?: number;
         take?: number
     }): Promise<Auction[]> {

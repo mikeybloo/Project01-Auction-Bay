@@ -26,9 +26,33 @@ export class AuctionsController {
     @HttpCode(HttpStatus.OK)
     async list(@Query('page') page: number): Promise<Auction[]> {
         // Pagination using Prisma. Takes the page number minus one and skips as many elements. 
-        return this.auctionsService.auctions({ 
+        return this.auctionsService.auctionsPaginated({ 
             skip: (page - 1) * 10,
             take: 10
+        });
+    }
+
+    @Get('myauctions')
+    @HttpCode(HttpStatus.OK)
+    async myAuctions(@Query('page') page: number, @Req() request: Request): Promise<Auction[]> {
+        const user = await this.usersService.currentUser(request.cookies['access_token']);
+
+        return this.auctionsService.auctions({ 
+            authorId: user.id
+        });
+    }
+
+    @Get('bidding')
+    @HttpCode(HttpStatus.OK)
+    async bidding(@Query('page') page: number, @Req() request: Request): Promise<Auction[]> {
+        const user = await this.usersService.currentUser(request.cookies['access_token']);
+
+        return this.auctionsService.auctions({
+            bids: {
+                some: {
+                    authorId: user.id
+                }
+            }
         });
     }
 
@@ -36,7 +60,7 @@ export class AuctionsController {
     @Get('demo')
     @HttpCode(HttpStatus.OK)
     async demo(): Promise<Auction[]> {
-        const auctions =  this.auctionsService.auctions({ 
+        const auctions =  this.auctionsService.auctionsPaginated({ 
             take: 20
         });
 
