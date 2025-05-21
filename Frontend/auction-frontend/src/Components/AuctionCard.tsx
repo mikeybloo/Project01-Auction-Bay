@@ -50,7 +50,7 @@ const AuctionCard: FC<Props> = ({ auction, user }) => {
     }
     
     //Calculate time remaining until auction ends
-    const remaining = new Date(auction.end_date).getTime() - new Date(auction.published_on).getTime();
+    const remaining = new Date(auction.end_date).getTime() - new Date().getTime();
     var timeText = '';
     var timeTagColor = '';
     if(remaining < 3600000){
@@ -83,7 +83,7 @@ const AuctionCard: FC<Props> = ({ auction, user }) => {
                 {auction.authorId === user?.id && status.text !== 'Done' && (
                     <>
                         <div style={{ position: 'absolute', bottom: '8px', right: '8px', display: 'flex', gap: '8px' }}>
-                            <Button >
+                            <Button>
                                 Delete
                             </Button>
                             <Button>

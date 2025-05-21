@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { FC, ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Form, Row, Col } from 'react-bootstrap'
@@ -19,7 +19,9 @@ const CreateAuctionForm: FC = () => {
   const [apiError, setApiError] = useState('');
   const [showError, setShowError] = useState(false);
 
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | undefined>('');
   const [fileError, setFileError] = useState(false);
 
   const handleFileError = () => {
@@ -33,6 +35,26 @@ const CreateAuctionForm: FC = () => {
         setFile(myfile)
     }
   }
+
+  const handleFileClick = () => {
+    fileInputRef.current?.click();
+  }
+
+  const handleRemoveFile = () => {
+    setFile(null)
+  }
+
+  useEffect(() => {
+    if(!file) {
+      setPreview(undefined)
+      return
+    }
+
+    const objectUrl = URL.createObjectURL(file)
+    setPreview(objectUrl)
+
+    return () => URL.revokeObjectURL(objectUrl)
+  }, [file]);
 
   const onSubmit = handleSubmit(async (data: CreateAuctionFields) => {
     if (!file) return
@@ -68,19 +90,28 @@ const CreateAuctionForm: FC = () => {
     <>
       <Form className="register-form" onSubmit={onSubmit}>
         <Form.Group className="mb-3">
-          <Form.Control
-            onChange={handleFileChange}
-            id="image"
-            name="image"
-            type="file"
-            aria-label="Product image"
-            aria-describedby="image"
-            className={fileError ? 'form-control is-invalid' : 'form-control'}
-          />
-          {fileError && (
-            <div className="d-block invalid-feedback text-danger mb-2">
-              Field product image is required
+          {file ? (
+            <div style={{ position: 'relative' }}>
+              <img src={preview} style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '15px' }}/>
+              <Button onClick={handleRemoveFile} variant="dark" style={{ position: 'absolute', top: '8px', right: '8px', }}><img src="/Trash.png" style={{ height: '15px' }}></img></Button>
             </div>
+          ) : (
+            <>
+              <Form.Control
+                onChange={handleFileChange}
+                ref={fileInputRef}
+                id="image"
+                name="image"
+                type="file"
+                aria-label="Product image"
+                aria-describedby="image"
+                className={fileError ? 'form-control is-invalid' : 'form-control'}
+                style={{ display: 'none' }}
+              />
+              <div style={{ width: '100%', height: '150px', backgroundColor: '#f6f6f4', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Button variant="outline-dark" style={{ borderRadius: '15px' }} onClick={handleFileClick}>Add image</Button>
+              </div>
+            </>
           )}
         </Form.Group>
         <Controller
