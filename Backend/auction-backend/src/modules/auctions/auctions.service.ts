@@ -75,7 +75,7 @@ export class AuctionsService {
             });
         } catch (err) {
             console.log(err);
-            throw new BadRequestException('Something went wrong while finding the auction')
+            throw new BadRequestException('Something went wrong while finding the auctions')
         }
     }
 

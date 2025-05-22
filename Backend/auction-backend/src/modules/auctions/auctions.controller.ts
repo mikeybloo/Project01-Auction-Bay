@@ -16,22 +16,6 @@ export class AuctionsController {
         private readonly bidsService: BidsService,
         private readonly usersService: UsersService) {}
 
-    @Get(':id')
-    @HttpCode(HttpStatus.OK)
-    async get(@Param('id') id: string): Promise<Auction> {
-        return this.auctionsService.auction({ id: id });
-    }
-
-    @Get()
-    @HttpCode(HttpStatus.OK)
-    async list(@Query('page') page: number): Promise<Auction[]> {
-        // Pagination using Prisma. Takes the page number minus one and skips as many elements. 
-        return this.auctionsService.auctionsPaginated({ 
-            skip: (page - 1) * 10,
-            take: 10
-        });
-    }
-
     @Get('myauctions')
     @HttpCode(HttpStatus.OK)
     async myAuctions(@Query('page') page: number, @Req() request: Request): Promise<Auction[]> {
@@ -53,6 +37,22 @@ export class AuctionsController {
                     authorId: user.id
                 }
             }
+        });
+    }
+
+    @Get(':id')
+    @HttpCode(HttpStatus.OK)
+    async get(@Param('id') id: string): Promise<Auction> {
+        return this.auctionsService.auction({ id: id });
+    }
+
+    @Get()
+    @HttpCode(HttpStatus.OK)
+    async list(@Query('page') page: number): Promise<Auction[]> {
+        // Pagination using Prisma. Takes the page number minus one and skips as many elements. 
+        return this.auctionsService.auctionsPaginated({ 
+            skip: (page - 1) * 10,
+            take: 10
         });
     }
 
