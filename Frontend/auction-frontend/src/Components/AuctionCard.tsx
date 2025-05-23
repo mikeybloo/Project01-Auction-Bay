@@ -1,9 +1,10 @@
-import type { FC } from 'react'
+import { useState, type FC } from 'react'
 import type { AuctionType } from '../Models/auction'
 import type { UserType } from '../Models/auth'
 import { Link } from 'react-router-dom'
 import { routes } from '../Constants/routesConstants'
-import { Button, Image } from 'react-bootstrap'
+import { Button, Image, Modal } from 'react-bootstrap'
+import UpdateAuctionForm from './UpdateAuctionForm'
 
 type Props = {
     auction: AuctionType
@@ -12,6 +13,10 @@ type Props = {
 }
 
 const AuctionCard: FC<Props> = ({ auction, user, onDelete }) => {
+    const [showAuctionForm, setShowAuctionForm] = useState(false);
+    const handleCloseAuctionForm = () => setShowAuctionForm(false);
+    const handleShowAuctionForm = () => setShowAuctionForm(true);
+
     //Get max price
     const price = auction.bids?.length > 0
         ? auction.bids[0].offer
@@ -65,40 +70,51 @@ const AuctionCard: FC<Props> = ({ auction, user, onDelete }) => {
     }
 
     return (
-        <div style={{ height: '250px', width: '216px', backgroundColor: '#FFFFFF', borderRadius: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'hidden'}}>
-            <div style={{ marginTop: '8px', marginLeft: '8px', marginRight: '8px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                <div style={{color: status.color, backgroundColor: status.background, borderRadius: '20px', fontWeight: 'lighter', paddingLeft: '10px', paddingRight: '10px', fontSize: '12px'}}>{status.text}</div>
-                {status.text != 'Done' && ( //Don't render clock infographic if status is 'Done'
-                    <div style={{backgroundColor: timeTagColor, borderRadius: '20px', fontWeight: 'lighter', paddingLeft: '5px', paddingRight: '5px', fontSize: '12px', display: 'inline-flex', alignItems: 'center'}}>
-                        {timeText}
-                        <img src='\clock.png' style={{ height: '12px', verticalAlign: 'middle', marginLeft: '3px' }}/>
-                    </div>
-                )}
-            </div>
-            <div className="text-muted" style={{ marginTop: '8px', marginLeft: '8px', marginRight: '8px', color: '#071015' }}>
-                <Link to={`${routes.AUCTION}/${auction.id}`} className='text-decoration-none text-black'>{auction.title}</Link>
-            </div>
-            <div style={{ marginTop: '8px', marginLeft: '8px', marginRight: '8px', color: '#071015', fontSize: '16px', lineHeight: '24px', fontWeight: '600' }}>
-                {price} €
-            </div>
-            <div style={{ paddingBottom: '4px', paddingLeft: '4px', paddingRight: '4px', position: 'relative' }}>
-                <Link to={`${routes.AUCTION}/${auction.id}`}><img style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '12px' }} src={imageUrl} /></Link>
-            
-                {auction.authorId === user?.id && status.text !== 'Done' && (
-                    <>
-                        <div style={{ position: 'absolute', bottom: '8px', right: '8px', display: 'flex', gap: '8px' }}>
-                            <Button variant='dark' onClick={onDelete} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <Image src="/Trash.png" style={{ height: '15px' }} />
-                            </Button>
-                            <Button variant='light' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <Image src="/Edit.png" className='me-1' style={{ height: '15px' }} />
-                                Edit
-                            </Button>
+        <>
+            <div style={{ height: '250px', width: '216px', backgroundColor: '#FFFFFF', borderRadius: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'hidden'}}>
+                <div style={{ marginTop: '8px', marginLeft: '8px', marginRight: '8px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <div style={{color: status.color, backgroundColor: status.background, borderRadius: '20px', fontWeight: 'lighter', paddingLeft: '10px', paddingRight: '10px', fontSize: '12px'}}>{status.text}</div>
+                    {status.text != 'Done' && ( //Don't render clock infographic if status is 'Done'
+                        <div style={{backgroundColor: timeTagColor, borderRadius: '20px', fontWeight: 'lighter', paddingLeft: '5px', paddingRight: '5px', fontSize: '12px', display: 'inline-flex', alignItems: 'center'}}>
+                            {timeText}
+                            <img src='\clock.png' style={{ height: '12px', verticalAlign: 'middle', marginLeft: '3px' }}/>
                         </div>
-                    </>
-                )}
+                    )}
+                </div>
+                <div className="text-muted" style={{ marginTop: '8px', marginLeft: '8px', marginRight: '8px', color: '#071015' }}>
+                    <Link to={`${routes.AUCTION}/${auction.id}`} className='text-decoration-none text-black'>{auction.title}</Link>
+                </div>
+                <div style={{ marginTop: '8px', marginLeft: '8px', marginRight: '8px', color: '#071015', fontSize: '16px', lineHeight: '24px', fontWeight: '600' }}>
+                    {price} €
+                </div>
+                <div style={{ paddingBottom: '4px', paddingLeft: '4px', paddingRight: '4px', position: 'relative' }}>
+                    <Link to={`${routes.AUCTION}/${auction.id}`}><img style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '12px' }} src={imageUrl} /></Link>
+                
+                    {auction.authorId === user?.id && status.text !== 'Done' && (
+                        <>
+                            <div style={{ position: 'absolute', bottom: '8px', right: '8px', display: 'flex', gap: '8px' }}>
+                                <Button variant='dark' onClick={onDelete} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <Image src="/Trash.png" style={{ height: '15px' }} />
+                                </Button>
+                                <Button onClick={handleShowAuctionForm} variant='light' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <Image src="/Edit.png" className='me-1' style={{ height: '15px' }} />
+                                    Edit
+                                </Button>
+                            </div>
+                        </>
+                    )}
+                </div>
             </div>
-        </div>
+
+            <Modal show={showAuctionForm} onHide={handleCloseAuctionForm}>
+                <Modal.Header>
+                    <Modal.Title><h5 className='fw-bold'>Update auction</h5></Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <UpdateAuctionForm defaultValues={auction} onAuctionUpdate={handleCloseAuctionForm}/>
+                </Modal.Body>
+            </Modal>
+        </>
     );
 }
 

@@ -1,9 +1,9 @@
 import { apiRoutes } from '../Constants/apiConstants'
 import { apiRequest } from './Api'
 import type { AuctionType } from '../Models/auction'
-import type { UpdateUserFields } from '../Hooks/react-hook-form/useUpdateUser'
 import type { CreateAuctionFields } from '../Hooks/react-hook-form/Auction/useCreateAuction'
 import type { CreateBidFields } from '../Hooks/react-hook-form/useCreateBid'
+import type { UpdateAuctionFields } from '../Hooks/react-hook-form/Auction/useUpdateAuction'
 
 export const fetchAuction = async (id: string) =>
     apiRequest<undefined, AuctionType>('get', `${apiRoutes.AUCTIONS_PREFIX}/${id}`)
@@ -32,10 +32,10 @@ export const fetchAuction = async (id: string) =>
   export const postAuction = async (data: CreateAuctionFields) => 
     apiRequest<CreateAuctionFields, void>('post', `${apiRoutes.USERS_PREFIX}/auction`, data)
   
-  export const updateAuction = async (data: UpdateUserFields, id: string) =>
-    apiRequest<UpdateUserFields, void>(
+  export const updateAuction = async (data: UpdateAuctionFields, id: string) =>
+    apiRequest<UpdateAuctionFields, void>(
       'patch',
-      `${apiRoutes.USERS_PREFIX}/auctions/${id}`,
+      `${apiRoutes.USERS_PREFIX}/auction/${id}`,
       data,
     )
   

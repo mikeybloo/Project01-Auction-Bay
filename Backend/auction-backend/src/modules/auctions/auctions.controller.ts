@@ -91,7 +91,7 @@ export class AuctionsController {
     @Post('upload/:id')
     @UseInterceptors(FileInterceptor('image', saveImageToStorage))
     @HttpCode(HttpStatus.CREATED)
-    async upload(@UploadedFile() file: Express.Multer.File, @Param('id') productId: string): Promise<Auction> {
+    async upload(@UploadedFile() file: Express.Multer.File, @Param('id') auctionId: string): Promise<Auction> {
         const filename = file?.filename
 
         if (!filename) throw new BadRequestException('File must be a png, jpg, or jpeg.')
@@ -99,7 +99,7 @@ export class AuctionsController {
         const imagesFolderPath = join(process.cwd(), 'files')
         const fullImagePath = join(imagesFolderPath + '/' + file.filename)
         if (await isFileExtensionSafe(fullImagePath)) {
-            return this.auctionsService.updateProductImage(productId, filename)
+            return this.auctionsService.updateAuctionImage(auctionId, filename)
         }
 
         removeFile(fullImagePath)
