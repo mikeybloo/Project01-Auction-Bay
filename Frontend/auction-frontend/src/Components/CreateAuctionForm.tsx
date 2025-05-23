@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import type { FC, ChangeEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Form, Row, Col } from 'react-bootstrap'
 import { useCreateAuctionForm } from '../Hooks/react-hook-form/Auction/useCreateAuction'
 import type { CreateAuctionFields } from '../Hooks/react-hook-form/Auction/useCreateAuction'
@@ -13,8 +12,11 @@ import * as API from '../Services/Api'
 import { statusCode } from '../Constants/errorConstants'
 import { observer } from 'mobx-react'
 
-const CreateAuctionForm: FC = () => {
-  const navigate = useNavigate();
+type Props = {
+    onAuctionCreate: () => void
+}
+
+const CreateAuctionForm: FC<Props> = ({ onAuctionCreate }) => {
   const { handleSubmit, errors, control } = useCreateAuctionForm();
   const [apiError, setApiError] = useState('');
   const [showError, setShowError] = useState(false);
@@ -76,7 +78,7 @@ const CreateAuctionForm: FC = () => {
             setApiError(fileResponse.data.message)
             setShowError(true)
         } else {
-            navigate('/auctions');
+            onAuctionCreate();
         }
     }
   })

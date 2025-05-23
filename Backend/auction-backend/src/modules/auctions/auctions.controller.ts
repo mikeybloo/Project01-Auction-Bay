@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, HttpCode, HttpStatus, Param, Post, Query, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { Auction, Bid } from '@prisma/client';
 import { Public } from 'src/decorators/public.decorator';
 import { AuctionsService } from './auctions.service';
@@ -104,5 +104,18 @@ export class AuctionsController {
 
         removeFile(fullImagePath)
         throw new BadRequestException('File content does not match extension!')
+    }
+
+    @Delete(':id')
+    @HttpCode(HttpStatus.OK)
+    async remove(@Param('id') auctionId: string, @Req() request: Request): Promise<Auction> {
+        const auction: Auction = await this.auctionsService.auction({ id: auctionId });
+        const user = await this.usersService.currentUser(request.cookies['access_token']);
+        
+        if(auction.authorId !== user.id) {
+            throw new ForbiddenException('Modifications to this auction are forbidden!')
+        }
+
+        return this.auctionsService.deleteAuction({ id: auctionId });
     }
 }

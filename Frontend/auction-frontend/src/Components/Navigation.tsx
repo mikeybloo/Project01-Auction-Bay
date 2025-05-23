@@ -87,7 +87,7 @@ const Navigation: FC = () => {
           <Modal.Title><h5 className='fw-bold'>Add auction</h5></Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <CreateAuctionForm />
+          <CreateAuctionForm onAuctionCreate={handleCloseAuctionForm}/>
         </Modal.Body>
       </Modal>
       

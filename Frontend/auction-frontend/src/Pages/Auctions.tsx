@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useState, type FC } from 'react'
 import Layout from '../Components/Layout'
-import { useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import * as API from '../Services/Api'
 import type { AuctionType } from '../Models/auction'
 import { Col, Row, Toast, ToastContainer } from 'react-bootstrap'
@@ -30,20 +30,30 @@ const Auctions: FC = () => {
         },
     )
 
+    const queryClient = useQueryClient();
+    const deleteMutation = useMutation(
+        (auctionId: string) => API.deleteAuction(auctionId),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(['fetchAuctions']);
+            },
+            onError: (err) => {
+                setApiError((err as Error).message)
+                setShowError(true)
+            }
+        }
+    )
+
     return (
         <Layout>
             <h2 className='fw-bold'>Auctions</h2>
             {isLoading ? (
                 <div>Loading auctions...</div>
             ) : (
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Row className='g-5 p-4'>
-                        {Array.isArray(data?.data) && data?.data.map((auction: AuctionType) => (
-                            <Col xs={12} sm={6} md={4} lg={2} key={auction.id}>
-                                <AuctionCard auction={auction} user={authStore.user}/>
-                            </Col>
-                        ))}
-                    </Row>
+                <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
+                    {Array.isArray(data?.data) && data?.data.map((auction: AuctionType) => (
+                        <AuctionCard key={auction.id} auction={auction} user={authStore.user} onDelete={() => deleteMutation.mutate(auction.id)}/>
+                    ))}
                 </div>
             )}
             {showError && (

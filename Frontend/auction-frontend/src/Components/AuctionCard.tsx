@@ -8,9 +8,10 @@ import { Button, Image } from 'react-bootstrap'
 type Props = {
     auction: AuctionType
     user: UserType | null | undefined
+    onDelete?: () => void 
 }
 
-const AuctionCard: FC<Props> = ({ auction, user }) => {
+const AuctionCard: FC<Props> = ({ auction, user, onDelete }) => {
     //Get max price
     const price = auction.bids?.length > 0
         ? auction.bids[0].offer
@@ -56,6 +57,9 @@ const AuctionCard: FC<Props> = ({ auction, user }) => {
     if(remaining < 3600000){
         timeText = `${Math.floor(remaining / 60000).toString()}m`;
         timeTagColor = '#ffaa98';
+    } else if(remaining < 86400000) {
+        timeText = `${Math.floor(remaining / 3600000)}h`;
+        timeTagColor = '#ffaa98';
     } else {
         timeText = `${Math.floor(remaining / 3600000)}h`;
     }
@@ -83,7 +87,7 @@ const AuctionCard: FC<Props> = ({ auction, user }) => {
                 {auction.authorId === user?.id && status.text !== 'Done' && (
                     <>
                         <div style={{ position: 'absolute', bottom: '8px', right: '8px', display: 'flex', gap: '8px' }}>
-                            <Button variant='dark' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Button variant='dark' onClick={onDelete} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 <Image src="/Trash.png" style={{ height: '15px' }} />
                             </Button>
                             <Button variant='light' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

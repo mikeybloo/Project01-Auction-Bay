@@ -41,7 +41,7 @@ const Profile: FC = () => {
   )
 
   const filteredAuctions = useMemo(() => {
-    if (activeTab !== 'won') return data?.data
+    if (Array.isArray(data?.data) && activeTab !== 'won') return data?.data
 
     return data?.data.filter(auction => {
       const topBid = auction.bids?.[0]
