@@ -14,7 +14,7 @@ export const useUpdatePasswordForm = () => {
     newPassword: Yup.string().matches(
         /^(?=.*\d)[A-Za-z.\s_-]+[\w~@#$%^&*+=`|{}:;!.?"()[\]-]{6,}/,
         'Password must have at least one number, lower or upper case letter nad it has to be longer than 5 characters.',
-      ).notRequired(),
+      ).required(),
     confirmNewPassword: Yup.string()
         .oneOf([Yup.ref('newPassword')], 'Passwords do not match')
         .required('Passwords do not match')

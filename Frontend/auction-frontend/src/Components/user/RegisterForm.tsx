@@ -95,7 +95,7 @@ const RegisterForm: FC = () => {
                             value={field.value ?? ''}
                             placeholder='Last name (optional)'
                             type="text"
-                            aria-label="Last name"
+                            aria-label="Surname"
                             aria-describedby="surname"
                             className={
                             errors.surname ? 'form-control is-invalid' : 'form-control'

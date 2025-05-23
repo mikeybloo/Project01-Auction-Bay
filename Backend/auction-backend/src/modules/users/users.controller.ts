@@ -7,6 +7,7 @@ import { AuthService } from '../auth/auth.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { isFileExtensionSafe, removeFile, saveImageToStorage } from 'src/helpers/imageStorage';
 import { join } from 'path';
+import { compareHash, hash } from 'src/utils/bcrypt';
 
 @Controller('me')
 export class UsersController {
@@ -38,7 +39,7 @@ export class UsersController {
     }
 
     @Post('upload')
-    @UseInterceptors(FileInterceptor('avatar', saveImageToStorage))
+    @UseInterceptors(FileInterceptor('image', saveImageToStorage))
     @HttpCode(HttpStatus.CREATED)
     async upload(@UploadedFile() file: Express.Multer.File, @Req() request: Request): Promise<User> {
         const user = await this.usersService.currentUser(request.cookies['access_token']);
@@ -78,20 +79,27 @@ export class UsersController {
 
     @Patch('update-password')
     @HttpCode(HttpStatus.OK)
-    async updatePassword(@Body() passwords: any, @Req() request: Request): Promise<User> {
-        try{
-            const user = await this.usersService.currentUser(request.cookies['access_token']);
-            const userId = user.id;
+    async updatePassword(@Body() passwords: any, @Req() request: Request): Promise<User> {        
+        const requestUser = await this.usersService.currentUser(request.cookies['access_token']);
+        const userId = requestUser.id;
+        const user = await this.usersService.userSecure({ id: requestUser.id });
 
+        if(!(await compareHash(passwords.currentPassword, user.password))) {
+            throw new BadRequestException('Current password is incorrect');
+        };
+
+        const hashedPassword = await hash(passwords.newPassword);
+
+        try{
             return this.usersService.updateUser({
                 where: { id: userId },
                 data: {
-                    password: passwords.newPassword
+                    password: hashedPassword
                 },
             })
         } catch (err) {
             console.log(err)
-            throw new BadRequestException('Something went wrong while updating the user data.')
+            throw new BadRequestException('Something went wrong while updating the user password.')
         }
     }
 

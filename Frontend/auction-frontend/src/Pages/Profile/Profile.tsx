@@ -86,34 +86,30 @@ const Profile: FC = () => {
         ) : (
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 {activeTab !== 'won' ? (
-                  <Row className='g-5 p-4'>
+                  <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
                       {Array.isArray(data?.data) && data.data.map((auction: AuctionType) => (
-                          <Col xs={12} sm={6} md={4} lg={2} key={auction.id}>
-                              <AuctionCard auction={auction} user={authStore.user}/>
-                          </Col>
+                        <AuctionCard key={auction.id} auction={auction} user={authStore.user}/>
                       ))}
-                  </Row>
+                  </div>
                 ) : (
-                  <Row className='g-5 p-4'>
+                  <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
                       {Array.isArray(filteredAuctions) && filteredAuctions.map((auction: AuctionType) => (
-                          <Col xs={12} sm={6} md={4} lg={2} key={auction.id}>
-                              <AuctionCard auction={auction} user={authStore.user}/>
-                          </Col>
+                          <AuctionCard key={auction.id} auction={auction} user={authStore.user}/>
                       ))}
-                  </Row>
+                  </div>
                 )}
             </div>
         )}
         {showError && (
-                <ToastContainer className="p-3" position="top-end">
-                    <Toast onClose={() => setShowError(false)} show={showError}>
-                        <Toast.Header>
-                            <strong className="me-auto text-danger">Error</strong>
-                        </Toast.Header>
-                        <Toast.Body className="text-danger bg-light">{apiError}</Toast.Body>
-                    </Toast>
-                </ToastContainer>
-            )}
+            <ToastContainer className="p-3" position="top-end">
+                <Toast onClose={() => setShowError(false)} show={showError}>
+                    <Toast.Header>
+                        <strong className="me-auto text-danger">Error</strong>
+                    </Toast.Header>
+                    <Toast.Body className="text-danger bg-light">{apiError}</Toast.Body>
+                </Toast>
+            </ToastContainer>
+        )}
     </Layout>
   )
 }

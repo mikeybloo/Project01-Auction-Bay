@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import { routes } from '../Constants/routesConstants'
 import type { AuctionType } from '../Models/auction'
 import AuctionCardDemo from '../Components/AuctionCardDemo'
+import * as API from '../Services/Api'
 
 const auctions: AuctionType[] =[
   {
@@ -59,18 +60,18 @@ const auctions: AuctionType[] =[
 ]
 
 const Login: FC = () => {
+  
+
   return (
     <>
       <Container fluid >
         <Row className='min-vh-100'>
-          <Col sm={8} style={{ backgroundColor: '#f6f6f4'}}>
-            <Row className='g-4 p-4'>
+          <Col sm={8} style={{ display: 'flex', backgroundColor: '#f6f6f4', alignItems: 'center', justifyContent: 'center'}}>
+            <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', width: '50%', height: '50%', gap: '1rem' }}>
               {auctions.map((auction) => (
-                <Col md={6} key={auction.id}>
-                  <AuctionCardDemo auction={auction} />
-                </Col>
+                <AuctionCardDemo key={auction.id} auction={auction} />
               ))}
-            </Row>
+            </div>
           </Col>
           <Col sm={4}>
             <div style={{ width: '100%' }}>

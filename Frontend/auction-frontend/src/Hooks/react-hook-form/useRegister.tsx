@@ -3,8 +3,8 @@ import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
 export interface RegisterUserFields {
-  first_name?: Yup.Maybe<string | undefined>
-  last_name?: Yup.Maybe<string | undefined>
+  name?: Yup.Maybe<string | undefined>
+  surname?: Yup.Maybe<string | undefined>
   email: string
   password: string
   confirm_password: string

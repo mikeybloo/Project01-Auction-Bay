@@ -7,6 +7,9 @@ import { routes } from '../Constants/routesConstants'
 import * as API from '../Services/Api'
 import { statusCode } from '../Constants/errorConstants'
 import CreateAuctionForm from './CreateAuctionForm'
+import UpdateUserForm from './UpdateUserForm'
+import UpdatePasswordForm from './UpdatePasswordForm'
+import ProfilePictureModal from './ProfilePictureModal'
 
 const Navigation: FC = () => {
   const [apiError, setApiError] = useState('');
@@ -21,12 +24,27 @@ const Navigation: FC = () => {
   const handleCloseAuctionForm = () => setShowAuctionForm(false);
   const handleShowAuctionForm = () => setShowAuctionForm(true);
 
+  const [showProfileSettings, setShowProfileSettings] = useState(false);
+  const handleCloseProfileSettings = () => setShowProfileSettings(false);
+  const handleShowProfileSettings = () => setShowProfileSettings(true);
+
+  const [showPasswordSettings, setShowPasswordSettings] = useState(false);
+  const handleClosePasswordSettings = () => setShowPasswordSettings(false);
+  const handleShowPasswordSettings = () => setShowPasswordSettings(true);
+
+  const [showProfilePictureSettings, setShowProfilePictureSettings] = useState(false);
+  const handleCloseProfilePictureSettings = () => setShowProfilePictureSettings(false);
+  const handleShowProfilePictureSettings = () => setShowProfilePictureSettings(true);
+
   const location = useLocation();
   const currentPath = location.pathname;
   var avatarImagePath = "";
 
   if(authStore.user?.avatar == null || authStore.user?.avatar == "" || authStore.user?.avatar == undefined) {
     avatarImagePath = '/Default_User.png';
+  } else {
+    console.log(`AVATYAR URL: ${import.meta.env.VITE_API_URL}/files/${authStore.user?.avatar}`)
+    avatarImagePath = `${import.meta.env.VITE_API_URL}/files/${authStore.user?.avatar}`;
   }
 
   const signout = async () => {
@@ -42,6 +60,8 @@ const Navigation: FC = () => {
       navigate('/')
     }
   }
+
+  console.log(JSON.stringify(authStore.user))
 
   return (
     <>
@@ -70,16 +90,48 @@ const Navigation: FC = () => {
           </div>
           <ButtonGroup className='bg-white rounded-pill ms-4' style={{ height: '50px' }}>
             <Button onClick={handleShowAuctionForm} className='rounded-pill text-black d-flex align-items-center' style={{ backgroundColor: '#f4ff47', borderColor: '#f4ff47', width: '50px' }}><span style={{ fontWeight: '300', fontSize: '30px', marginBottom: '5px', marginLeft: '2px' }}>+</span></Button>
-            <Button onClick={handleShowProfile} className='rounded-pill bg-white border-black ms-1 d-flex align-items-center'><img src={avatarImagePath} height={25}/></Button>
+            <Button onClick={handleShowProfile} className='rounded-pill bg-white border-black ms-1 d-flex align-items-center'><Image src={avatarImagePath} height={25}/></Button>
           </ButtonGroup>
         </Container>
       </Navbar>
 
       <Modal show={showProfile} onHide={handleCloseProfile}>
-        <Modal.Header closeButton>
-          <Modal.Title>Profile settings</Modal.Title>
+        <Modal.Body className='d-flex flex-column align-items-center justify-content-center'>
+          <Button variant='light' className='d-flex align-items-center mt-4 mb-1' onClick={handleShowProfileSettings}><Image src='/Settings.png' className='me-2' style={{ height: '15px' }}/> Profile settings</Button>
+          <Button variant='light' className='d-flex align-items-center my-1' onClick={handleShowPasswordSettings}><Image src='/Settings.png' className='me-2' style={{ height: '15px' }}/> Change password</Button>
+          <Button variant='light' className='d-flex align-items-center mt-1 mb-4' onClick={handleShowProfilePictureSettings}><Image src='/Settings.png' className='me-2' style={{ height: '15px' }}/> Change profile picture</Button>
+          <Button variant='outline-dark' style={{ borderRadius: '20px' }} onClick={signout}>Sign out</Button>
+        </Modal.Body>
+      </Modal>
+
+      {/* Modal for profile settings */}
+      <Modal show={showProfileSettings} onHide={handleCloseProfileSettings}>
+        <Modal.Header>
+          <Modal.Title><h5 className='fw-bold'>Profile settings</h5></Modal.Title>
         </Modal.Header>
-        <Modal.Body><Button className="btn btn-dark" onClick={signout}>Sign out</Button></Modal.Body>
+        <Modal.Body>
+          <UpdateUserForm onProfileUpdate={handleCloseProfileSettings} defaultValues={authStore.user!}/>
+        </Modal.Body>
+      </Modal>
+
+      {/* Modal for password change */}
+      <Modal show={showPasswordSettings} onHide={handleClosePasswordSettings}>
+        <Modal.Header>
+          <Modal.Title><h5 className='fw-bold'>Change password</h5></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <UpdatePasswordForm onPasswordUpdate={handleClosePasswordSettings} />
+        </Modal.Body>
+      </Modal>
+
+      {/* Modal for profile picture change */}
+      <Modal show={showProfilePictureSettings} onHide={handleCloseProfilePictureSettings}>
+        <Modal.Header>
+          <Modal.Title><h5 className='fw-bold'>Change profile picture</h5></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ProfilePictureModal onProfilePictureUpdate={handleCloseProfilePictureSettings} />
+        </Modal.Body>
       </Modal>
 
       <Modal show={showAuctionForm} onHide={handleCloseAuctionForm}>

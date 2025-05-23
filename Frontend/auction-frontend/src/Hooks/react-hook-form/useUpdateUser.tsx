@@ -4,9 +4,9 @@ import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
 export interface UpdateUserFields {
-  first_name?: string
-  last_name?: string
-  email: string
+  name?: string | null
+  surname?: string | null
+  email?: string | null
 }
 
 interface Props {
@@ -15,9 +15,9 @@ interface Props {
 
 export const useUpdateUserForm = ({ defaultValues }: Props) => {
   const UpdateUserSchema = Yup.object().shape({
-    first_name: Yup.string().notRequired(),
-    last_name: Yup.string().notRequired(),
-    email: Yup.string().email().required('Please enter a valid email')
+    name: Yup.string().notRequired(),
+    surname: Yup.string().notRequired(),
+    email: Yup.string().email().required('Email is required!')
   })
 
   const {
@@ -27,8 +27,8 @@ export const useUpdateUserForm = ({ defaultValues }: Props) => {
     control,
   } = useForm({
     defaultValues: {
-      first_name: '',
-      last_name: '',
+      name: '',
+      surname: '',
       email: '',
       ...defaultValues,
     },
