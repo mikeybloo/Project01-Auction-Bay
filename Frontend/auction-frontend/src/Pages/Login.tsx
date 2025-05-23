@@ -1,19 +1,18 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import type { FC } from 'react'
+import { type FC } from 'react'
 import { Col, Container, Image, Row } from 'react-bootstrap'
 import LoginForm from '../Components/user/LoginForm'
 import { Link } from 'react-router-dom'
 import { routes } from '../Constants/routesConstants'
 import type { AuctionType } from '../Models/auction'
 import AuctionCardDemo from '../Components/AuctionCardDemo'
-import * as API from '../Services/Api'
 
 const auctions: AuctionType[] =[
   {
     id: '1',
     title: 'Macbook Pro 15 2015',
-    description: 'Used MacBook in good condition',
-    image: '',
+    description: '',
+    image: '/Demos/laptopdemo.png',
     starting_price: 200,
     published_on: new Date(),
     end_date: new Date(Date.now() + 600000),
@@ -24,8 +23,8 @@ const auctions: AuctionType[] =[
   {
     id: '2',
     title: 'iPad Pro 13inch',
-    description: 'iPad Pro with Apple Pencil',
-    image: '',
+    description: '',
+    image: '/Demos/ipaddemo.png',
     starting_price: 500,
     published_on: new Date(),
     end_date: new Date(Date.now() + 172800000),
@@ -35,10 +34,10 @@ const auctions: AuctionType[] =[
   },
   {
     id: '3',
-    title: 'Item 3',
-    description: 'Description of item #3',
-    image: '',
-    starting_price: 100,
+    title: 'Earphones',
+    description: '',
+    image: '/Demos/earbudsdemo.png',
+    starting_price: 77,
     published_on: new Date(),
     end_date: new Date(Date.now() + 172800000),
     active: true,
@@ -47,10 +46,10 @@ const auctions: AuctionType[] =[
   },
   {
     id: '4',
-    title: 'Item 4',
+    title: 'iMac 27inch 2019 combo',
     description: 'Description of item #4',
-    image: '',
-    starting_price: 200,
+    image: '/Demos/macdemo.png',
+    starting_price: 600,
     published_on: new Date(),
     end_date: new Date(Date.now() + 172800000),
     active: true,
@@ -60,7 +59,25 @@ const auctions: AuctionType[] =[
 ]
 
 const Login: FC = () => {
-  
+  // const [apiError, setApiError] = useState('')
+  // const [showError, setShowError] = useState(false)
+
+  // const { data, isLoading, isError, error } = useQuery(
+  //     ['fetchAuctions'],
+  //     () => API.fetchDemoAuctions(),
+  //     {
+  //         keepPreviousData: true,
+  //         refetchOnWindowFocus: false,
+  //         onError: (err) => {
+  //             setApiError((err as Error).message)
+  //             setShowError(true)
+  //         },
+  //         onSuccess: () => {
+  //             setShowError(false)
+  //             setApiError('')
+  //         }
+  //     },
+  // )
 
   return (
     <>

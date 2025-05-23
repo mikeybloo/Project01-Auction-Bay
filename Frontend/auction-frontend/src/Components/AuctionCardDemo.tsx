@@ -33,7 +33,7 @@ const AuctionCardDemo: FC<Props> = ({ auction }) => {
                 {auction.starting_price} €
             </div>
             <div style={{ paddingBottom: '4px', paddingLeft: '4px', paddingRight: '4px' }}>
-                <img style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '12px' }} src='https://e.snmc.io/i/600/s/cab1e2c39ec226ff402e086ec94d4189/5143549/agalloch-the-mantle-Cover-Art.jpg' />
+                <img style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '12px' }} src={auction.image} />
             </div>
         </div>
     );

@@ -90,6 +90,7 @@ const UpdateAuctionForm: FC<Props> = ({ defaultValues, onAuctionUpdate }) => {
     }, {
         onSuccess: () => {
             queryClient.invalidateQueries(['fetchAuctions']);
+            queryClient.invalidateQueries(['fetchMyAuctions']);
             onAuctionUpdate();
         },
         onError: (error: any) => {

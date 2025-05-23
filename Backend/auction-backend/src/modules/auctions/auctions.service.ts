@@ -45,7 +45,7 @@ export class AuctionsService {
 
     async auctions(auctionWhereInput: Prisma.AuctionWhereInput): Promise<Auction[]> {
         try {
-            return this.prisma.auction.findMany({ 
+            const auctions =  this.prisma.auction.findMany({ 
                 where: auctionWhereInput,
                 include: {
                     bids: {
@@ -73,6 +73,18 @@ export class AuctionsService {
                     }
                 }
             });
+            
+            (await auctions).sort((a, b) => {
+                const aEnded = a.end_date < new Date();
+                const bEnded = b.end_date < new Date();
+
+                if (aEnded && !bEnded) return 1;
+                if (!aEnded && bEnded) return -1;
+
+                return a.end_date.getTime() - b.end_date.getTime();
+            });
+
+            return auctions;
         } catch (err) {
             console.log(err);
             throw new BadRequestException('Something went wrong while finding the auctions')
@@ -84,7 +96,7 @@ export class AuctionsService {
         take?: number
     }): Promise<Auction[]> {
         const { skip, take } = params;
-        return this.prisma.auction.findMany({
+        const auctions = this.prisma.auction.findMany({
             skip, 
             take,
             include: {
@@ -113,6 +125,18 @@ export class AuctionsService {
                 }
             }
         });
+
+        (await auctions).sort((a, b) => {
+            const aEnded = a.end_date < new Date();
+            const bEnded = b.end_date < new Date();
+
+            if (aEnded && !bEnded) return 1;
+            if (!aEnded && bEnded) return -1;
+
+            return a.end_date.getTime() - b.end_date.getTime();
+        });
+
+        return auctions;
     }
 
     async createAuction(data: Prisma.AuctionCreateInput): Promise<Auction> {

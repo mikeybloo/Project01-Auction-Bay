@@ -35,7 +35,7 @@ model Auction {
   end_date DateTime
   active Boolean
 
-  author User @relation(fields: [authorId], references: [id])
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
 
   bids Bid[]
@@ -46,9 +46,9 @@ model Bid {
   offer Int 
   published_on DateTime
 
-  author User @relation(fields: [authorId], references: [id])
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
 
-  auction Auction @relation(fields: [auctionId], references: [id])
+  auction Auction @relation(fields: [auctionId], references: [id], onDelete: Cascade)
   auctionId String
 }

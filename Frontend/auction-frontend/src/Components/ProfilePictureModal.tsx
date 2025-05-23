@@ -71,7 +71,9 @@ const CreateAuctionForm: FC<Props> = ({ onProfilePictureUpdate }) => {
         setApiError(fileResponse.data.message);
         setShowError(true);
     } else {
-        onProfilePictureUpdate();
+      const user = await API.fetchUser()
+      authStore.login(user.data);
+      onProfilePictureUpdate();
     }
 };
 

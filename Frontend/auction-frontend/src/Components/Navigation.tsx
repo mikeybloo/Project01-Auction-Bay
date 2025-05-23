@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react'
+import { useEffect, useState, type FC } from 'react'
 import { Button, ButtonGroup, Container, Image, Modal, Navbar, Toast, ToastContainer } from 'react-bootstrap'
 import authStore from '../Stores/auth.store'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -10,11 +10,13 @@ import CreateAuctionForm from './CreateAuctionForm'
 import UpdateUserForm from './UpdateUserForm'
 import UpdatePasswordForm from './UpdatePasswordForm'
 import ProfilePictureModal from './ProfilePictureModal'
+import { observer } from 'mobx-react'
 
 const Navigation: FC = () => {
   const [apiError, setApiError] = useState('');
   const [showError, setShowError] = useState(false);
   const navigate = useNavigate();
+  const [avatarImagePath, setAvatarImagePath] = useState('');
 
   const [showProfile, setShowProfile] = useState(false);
   const handleCloseProfile = () => setShowProfile(false);
@@ -38,14 +40,7 @@ const Navigation: FC = () => {
 
   const location = useLocation();
   const currentPath = location.pathname;
-  var avatarImagePath = "";
-
-  if(authStore.user?.avatar == null || authStore.user?.avatar == "" || authStore.user?.avatar == undefined) {
-    avatarImagePath = '/Default_User.png';
-  } else {
-    console.log(`AVATYAR URL: ${import.meta.env.VITE_API_URL}/files/${authStore.user?.avatar}`)
-    avatarImagePath = `${import.meta.env.VITE_API_URL}/files/${authStore.user?.avatar}`;
-  }
+  
 
   const signout = async () => {
     const response = await API.signout()
@@ -61,7 +56,14 @@ const Navigation: FC = () => {
     }
   }
 
-  console.log(JSON.stringify(authStore.user))
+  useEffect(() => {
+    if(authStore.user?.avatar == null || authStore.user?.avatar == "" || authStore.user?.avatar == undefined) {
+      setAvatarImagePath('/Default_User.png');
+    } else {
+      console.log(`AVATYAR URL: ${import.meta.env.VITE_API_URL}/files/${authStore.user?.avatar}`)
+      setAvatarImagePath(`${import.meta.env.VITE_API_URL}/files/${authStore.user?.avatar}`);
+    }
+  }, [authStore.user?.avatar])
 
   return (
     <>
@@ -90,7 +92,7 @@ const Navigation: FC = () => {
           </div>
           <ButtonGroup className='bg-white rounded-pill ms-4' style={{ height: '50px' }}>
             <Button onClick={handleShowAuctionForm} className='rounded-pill text-black d-flex align-items-center' style={{ backgroundColor: '#f4ff47', borderColor: '#f4ff47', width: '50px' }}><span style={{ fontWeight: '300', fontSize: '30px', marginBottom: '5px', marginLeft: '2px' }}>+</span></Button>
-            <Button onClick={handleShowProfile} className='rounded-pill bg-white border-black ms-1 d-flex align-items-center'><Image src={avatarImagePath} height={25}/></Button>
+            <Button onClick={handleShowProfile} className="rounded-circle bg-white border-black ms-1 d-flex align-items-center justify-content-center p-0" style={{ height: '50px', width: '50px' }}><Image src={avatarImagePath} className="rounded-circle" style={{ height: '48px', width: '48px', objectFit: 'cover' }}/></Button>
           </ButtonGroup>
         </Container>
       </Navbar>
@@ -157,4 +159,4 @@ const Navigation: FC = () => {
   )
 }
 
-export default Navigation
+export default observer(Navigation)

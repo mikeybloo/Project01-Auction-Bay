@@ -11,12 +11,14 @@ import Button from 'react-bootstrap/Button'
 import * as API from '../Services/Api'
 import { statusCode } from '../Constants/errorConstants'
 import { observer } from 'mobx-react'
+import { useMutation, useQueryClient } from 'react-query'
 
 type Props = {
     onAuctionCreate: () => void
 }
 
 const CreateAuctionForm: FC<Props> = ({ onAuctionCreate }) => {
+  const queryClient = useQueryClient();
   const { handleSubmit, errors, control } = useCreateAuctionForm();
   const [apiError, setApiError] = useState('');
   const [showError, setShowError] = useState(false);
@@ -53,34 +55,42 @@ const CreateAuctionForm: FC<Props> = ({ onAuctionCreate }) => {
     return () => URL.revokeObjectURL(objectUrl)
   }, [file]);
 
-  const onSubmit = handleSubmit(async (data: CreateAuctionFields) => {
-    if (!file) return
-    const response = await API.postAuction(data);
+  const createAuctionMutation = useMutation(
+    async (data: CreateAuctionFields) => {
+        if (!file) return
+        const response = await API.postAuction(data);
 
-    if (response.data?.statusCode === statusCode.BAD_REQUEST) {
-      setApiError(response.data.message);
-      setShowError(true);
-    } else if (response.data?.statusCode === statusCode.INTERNAL_SERVER_ERROR) {
-      setApiError(response.data.message);
-      setShowError(true);
-    } else {
-        const formData = new FormData();
-        formData.append('image', file, file.name);
-        const fileResponse = await API.uploadAuctionImage(
-            formData,
-            response.data.id
-        )
-
-        if(fileResponse.data?.statusCode === statusCode.BAD_REQUEST) {
-            setApiError(fileResponse.data.message)
-            setShowError(true)
-        } else if(fileResponse.data?.statusCode === statusCode.INTERNAL_SERVER_ERROR){
-            setApiError(fileResponse.data.message)
-            setShowError(true)
+        if (response.data?.statusCode === statusCode.BAD_REQUEST) {
+          setApiError(response.data.message);
+          setShowError(true);
+        } else if (response.data?.statusCode === statusCode.INTERNAL_SERVER_ERROR) {
+          setApiError(response.data.message);
+          setShowError(true);
         } else {
+            const formData = new FormData();
+            formData.append('image', file, file.name);
+            const fileResponse = await API.uploadAuctionImage(
+                formData,
+                response.data.id
+            )
+
+            return response.data;
+        }
+    }, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(['fetchAuctions']);
+            queryClient.invalidateQueries(['fetchMyAuctions']);
             onAuctionCreate();
+        },
+        onError: (error: any) => {
+            setApiError(error.message || 'Auction creation failed');
+            setShowError(true);
         }
     }
+  )
+
+  const onSubmit = handleSubmit(async (data: CreateAuctionFields) => {
+    createAuctionMutation.mutate(data);
   })
 
   return (

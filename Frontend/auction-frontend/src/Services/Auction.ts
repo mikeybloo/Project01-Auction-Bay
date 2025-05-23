@@ -14,6 +14,12 @@ export const fetchAuction = async (id: string) =>
       `${apiRoutes.AUCTIONS_PREFIX}?page=${pageNumber}`,
     )
 
+  export const fetchDemoAuctions = async () =>
+    apiRequest<number, AuctionType[]>(
+      'get',
+      `${apiRoutes.AUCTIONS_PREFIX}/demo`,
+    )
+
   export const fetchMyAuctions = async () =>
     apiRequest<number, AuctionType[]>(
       'get',

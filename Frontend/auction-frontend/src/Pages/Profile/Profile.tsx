@@ -3,7 +3,7 @@ import { useMemo, useState, type FC } from 'react'
 import Layout from '../../Components/Layout'
 import authStore from '../../Stores/auth.store'
 import { Button, ButtonGroup, Col, Row, Toast, ToastContainer } from 'react-bootstrap'
-import { useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import * as API from '../../Services/Api'
 import type { AuctionType } from '../../Models/auction'
 import AuctionCard from '../../Components/AuctionCard'
@@ -38,6 +38,20 @@ const Profile: FC = () => {
             setApiError('')
           }
       },
+  )
+
+  const queryClient = useQueryClient();
+  const deleteMutation = useMutation(
+      (auctionId: string) => API.deleteAuction(auctionId),
+      {
+          onSuccess: () => {
+              queryClient.invalidateQueries(['fetchMyAuctions']);
+          },
+          onError: (err) => {
+              setApiError((err as Error).message)
+              setShowError(true)
+          }
+      }
   )
 
   const filteredAuctions = useMemo(() => {
@@ -88,7 +102,7 @@ const Profile: FC = () => {
                 {activeTab !== 'won' ? (
                   <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
                       {Array.isArray(data?.data) && data.data.map((auction: AuctionType) => (
-                        <AuctionCard key={auction.id} auction={auction} user={authStore.user}/>
+                        <AuctionCard key={auction.id} auction={auction} user={authStore.user} onDelete={() => deleteMutation.mutate(auction.id)}/>
                       ))}
                   </div>
                 ) : (
